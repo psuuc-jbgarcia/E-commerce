@@ -8,28 +8,34 @@ if (!isset($_SESSION['user_id'])) {
 require '../connection.php';
 
 // Ensure that product_id and other required POST variables are set and are valid
-if (isset($_POST['product_id'], $_POST['product_name'], $_POST['price'], $_POST['quantity'])) {
+if (isset($_POST['product_id'], $_POST['product_name'], $_POST['price'], $_POST['quantity'], $_POST['image_name'])) {
     // Get product details from the form submission
     $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
     $product_name = isset($_POST['product_name']) ? $_POST['product_name'] : '';
     $price = isset($_POST['price']) ? floatval($_POST['price']) : 0;
     $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 0;
+    $image_name = isset($_POST['image_name']) ? $_POST['image_name'] : '';
 
     $user_id = $_SESSION['user_id'];  // Get the logged-in user ID
 
     // Ensure valid data is provided
-    if ($product_id > 0 && $product_name && $price >= 0 && $quantity > 0) {
+    if ($product_id > 0 && $product_name && $price >= 0 && $quantity > 0 && $image_name) {
         // Calculate total price based on quantity
         $total_price = $price * $quantity;
 
         // Insert into the cart table
-        $cart_sql = "INSERT INTO cart (user_id, product_id, product_name, quantity, price, total_price) 
-                     VALUES (?, ?, ?, ?, ?, ?)
+        $cart_sql = "INSERT INTO cart (user_id, product_id, product_name, quantity, price, total_price, image_name) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?)
                      ON DUPLICATE KEY UPDATE quantity = quantity + ?, total_price = total_price + ?";
         $cart_stmt = $conn->prepare($cart_sql);
         
-        // Correct bind_param with matching placeholders
-        $cart_stmt->bind_param("iissddii", $user_id, $product_id, $product_name, $quantity, $price, $total_price, $quantity, $total_price);
+        // Debug: Ensure that the right variables are being passed
+        // echo '<pre>';
+        // print_r([$user_id, $product_id, $product_name, $quantity, $price, $total_price, $image_name, $quantity, $total_price]);
+        // echo '</pre>';
+        
+        // Correct bind_param with matching placeholders (9 parameters in total)
+        $cart_stmt->bind_param("iissddiis", $user_id, $product_id, $product_name, $quantity, $price, $total_price, $quantity, $total_price, $image_name,);
         
         $cart_stmt->execute();
 

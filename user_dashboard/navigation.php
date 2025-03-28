@@ -11,6 +11,9 @@
                 <li class="nav-item"><a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart me-1"></i> Cart</a></li>
                 <li class="nav-item"><a class="nav-link" href="orders.php"><i class="fas fa-box me-1"></i> Orders</a></li>
                 <li class="nav-item"><a class="nav-link" href="track_order.php"><i class="fas fa-map-marker-alt me-1"></i> Track Order</a></li>
+                <li class="nav-item">
+                <a class="nav-link" href="logout.php">Logout</a>
+            </li>
             </ul>
         </div>
     </div>
