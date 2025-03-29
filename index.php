@@ -56,10 +56,6 @@
             color: var(--text-color);
         }
 
-        .card-title i {
-            color: var(--primary-color);
-        }
-
         .footer {
             background-color: var(--primary-color);
             color: var(--background-color);
@@ -84,38 +80,6 @@
 
         .card-title {
             color: var(--primary-color);
-        }
-
-        .card-body p {
-            color: var(--text-color);
-        }
-
-        .bg-light {
-            background-color: var(--background-color) !important;
-        }
-
-        .bg-dark {
-            background-color: var(--primary-color) !important;
-        }
-
-        .text-white {
-            color: var(--background-color) !important;
-        }
-
-        .text-primary {
-            color: var(--primary-color) !important;
-        }
-
-        .text-success {
-            color: #28a745 !important;
-        }
-
-        .text-warning {
-            color: var(--accent-color) !important;
-        }
-
-        .text-danger {
-            color: var(--error-color) !important;
         }
     </style>
 </head>
@@ -152,110 +116,137 @@
         </div>
     </section>
 
-    <section id="features" class="py-5">
-        <div class="container text-center">
-            <h2 class="fw-bold mb-4"><i class="fas fa-star me-2"></i> Key Features</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-boxes me-1 text-primary"></i> Inventory Management</h5>
-                            <p class="card-text">Add, update, and remove items effortlessly.</p>
+    <!-- Carousel Section for Features, Info, and Services -->
+    <section id="carousel-section" class="py-5 bg-light">
+    <div id="featureCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <!-- Features Section -->
+            <div class="carousel-item active">
+                <section id="features" class="py-5 text-center">
+                    <div class="container">
+                        <h2 class="fw-bold mb-4"><i class="fas fa-star me-2"></i> Key Features</h2>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-boxes me-1 text-primary"></i> Inventory Management</h5>
+                                        <p class="card-text">Add, update, and remove items effortlessly.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-calculator me-1 text-success"></i> Automated Sales Calculation</h5>
+                                        <p class="card-text">Automatically calculate total sales with accuracy.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-history me-1 text-warning"></i> Sales History Management</h5>
+                                        <p class="card-text">Track and review sales records in real-time.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-calculator me-1 text-success"></i> Automated Sales Calculation</h5>
-                            <p class="card-text">Automatically calculate total sales with accuracy.</p>
+                </section>
+            </div>
+
+            <!-- Why Choose Us Section -->
+            <div class="carousel-item">
+                <section id="info" class="py-5 text-center bg-white">
+                    <div class="container">
+                        <h2 class="fw-bold"><i class="fas fa-info-circle me-2"></i> Why Choose Us?</h2>
+                        <p class="lead">Our system is specifically designed to cater to the needs of small grocery stores. It helps manage inventory, monitor sales, and automate processes to ensure smooth business operations.</p>
+                        <div class="row g-4 mt-4">
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-user-check me-1 text-primary"></i> User-Friendly Interface</h5>
+                                        <p class="card-text">Easily manage products and orders without any technical expertise.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-chart-pie me-1 text-success"></i> Analytics for Decision Making</h5>
+                                        <p class="card-text">Gain insights into sales trends and inventory levels to make data-driven decisions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-lock me-1 text-warning"></i> Secure and Reliable</h5>
+                                        <p class="card-text">Protects data with secure authentication and ensures system reliability.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-history me-1 text-warning"></i> Sales History Management</h5>
-                            <p class="card-text">Track and review sales records in real-time.</p>
+                </section>
+            </div>
+
+            <!-- Our Services Section -->
+            <div class="carousel-item">
+                <section id="services" class="py-5 text-center">
+                    <div class="container">
+                        <h2 class="fw-bold"><i class="fas fa-concierge-bell me-2"></i> Our Services</h2>
+                        <div class="row g-4 mt-4">
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-sync-alt me-1 text-primary"></i> Real-Time Inventory Updates</h5>
+                                        <p class="card-text">Keep track of inventory levels with real-time updates to prevent stockouts.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-shipping-fast me-1 text-success"></i> Fast Order Processing</h5>
+                                        <p class="card-text">Ensure that orders are processed quickly and efficiently.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="fas fa-chart-line me-1 text-warning"></i> Sales and Analytics</h5>
+                                        <p class="card-text">Analyze sales trends and make informed business decisions.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
-    </section>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#featureCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#featureCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+
+   
 
     <section id="about" class="py-5 bg-light text-center">
         <div class="container">
             <h2 class="fw-bold"><i class="fas fa-info-circle me-2"></i> About Us</h2>
             <p class="lead">Our mission is to help small grocery stores manage inventory efficiently, saving time and reducing
                 errors.</p>
-        </div>
-    </section>
-
-    <section id="info" class="py-5 bg-white text-center">
-        <div class="container">
-            <h2 class="fw-bold"><i class="fas fa-info-circle me-2"></i> Why Choose Us?</h2>
-            <p class="lead">Our system is specifically designed to cater to the needs of small grocery stores. It helps manage
-                inventory, monitor sales, and automate processes to ensure smooth business operations.</p>
-            <div class="row g-4 mt-4">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-user-check me-1 text-primary"></i> User-Friendly Interface</h5>
-                            <p class="card-text">Easily manage products and orders without any technical expertise.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-chart-pie me-1 text-success"></i> Analytics for Decision
-                                Making</h5>
-                            <p class="card-text">Gain insights into sales trends and inventory levels to make data-driven decisions.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-lock me-1 text-warning"></i> Secure and Reliable</h5>
-                            <p class="card-text">Protects data with secure authentication and ensures system reliability.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="services" class="py-5 text-center">
-        <div class="container">
-            <h2 class="fw-bold"><i class="fas fa-concierge-bell me-2"></i> Our Services</h2>
-            <div class="row g-4 mt-4">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-sync-alt me-1 text-primary"></i> Real-Time Inventory Updates</h5>
-                            <p class="card-text">Keep track of inventory levels with real-time updates to prevent stockouts.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-shipping-fast me-1 text-success"></i> Fast Order Processing</h5>
-                            <p class="card-text">Ensure that orders are processed quickly and efficiently.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-chart-line me-1 text-warning"></i> Sales and Analytics</h5>
-                            <p class="card-text">Analyze sales trends and make informed business decisions.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
