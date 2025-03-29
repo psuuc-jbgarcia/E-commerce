@@ -54,57 +54,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $order_date = date('Y-m-d');
 
         // Combine arrays for insertion
-        $product_ids_str = implode(", ", $product_ids);
+        $product_ids_str = implode(", ", $product_ids); // Comma separated product IDs
         $product_names_str = implode(", ", $product_names);
         $quantities_str = implode(", ", $quantities);
 
-        // Insert data into the orders table
-        $stmt = $conn->prepare("
-            INSERT INTO orders (
-                tracking_code, username, shipping_address, contact_number, product_ids,
-                product_names, quantities, payment_method, shipping_fee_total, grand_total,
-                order_status, order_date
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
+       
 
-        if ($stmt === false) {
-            showAlert('Error', 'Error preparing SQL statement: ' . $conn->error, 'error');
-        }
 
-        $stmt->bind_param(
-            "ssssssssddss",
-            $tracking_code, $username, $shipping_address, $contact_number,
-            $product_ids_str, $product_names_str, $quantities_str, $payment_method,
-            $shipping_fee_total, $grand_total, $order_status, $order_date
-        );
+// Start a transaction
+$conn->begin_transaction();
 
-        if (!$stmt->execute()) {
-            showAlert('Error', 'Error inserting order: ' . $stmt->error, 'error');
-        }
+try {
+    // Insert data into the orders table
+    $stmt = $conn->prepare("
+        INSERT INTO orders (
+            tracking_code, username, shipping_address, contact_number, product_ids,
+            product_names, quantities, payment_method, shipping_fee_total, grand_total,
+            order_status, order_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
 
-        // Get the last inserted order ID
-        $order_id = $stmt->insert_id;
+    $stmt->bind_param(
+        "ssssssssddss",
+        $tracking_code, $username, $shipping_address, $contact_number,
+        $product_ids_str, $product_names_str, $quantities_str, $payment_method,
+        $shipping_fee_total, $grand_total, $order_status, $order_date
+    );
 
-        // Update stock for each product
-        for ($i = 0; $i < count($product_ids); $i++) {
-            $product_id = intval($product_ids[$i]);
-            $quantity = intval($quantities[$i]);
+    if (!$stmt->execute()) {
+        throw new Exception("Error inserting order: " . $stmt->error);
+    }
 
-            // Check stock availability before updating
-            $check_stock_stmt = $conn->prepare("SELECT stock, name FROM products WHERE id = ?");
-            $check_stock_stmt->bind_param("i", $product_id);
-            $check_stock_stmt->execute();
-            $result = $check_stock_stmt->get_result();
+    // Get the last inserted order ID
+    $order_id = $stmt->insert_id;
 
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $product_name = $row['name'];  // Get product name
+    // Debug: Print product IDs to check if they are being passed correctly
+    // echo "Product IDs: " . implode(", ", $product_ids) . "<br>";
 
-                if ($row['stock'] < $quantity) {
-                    showAlert('Error', "Insufficient stock for product: $product_name", 'error');
-                }
-            } else {
-                showAlert('Error', "Product '$product_id' not found.", 'error');
+    // Loop through each product in the order
+    for ($i = 0; $i < count($product_ids); $i++) {
+        $product_id = intval($product_ids[$i]);
+        $quantity = intval($quantities[$i]);
+
+        // Debug: Print product ID and quantity for each loop iteration
+        // echo "Processing Product ID: $product_id, Quantity: $quantity<br>";
+
+        // Check stock availability before updating
+        $check_stock_stmt = $conn->prepare("SELECT stock, name FROM products WHERE id = ?");
+        $check_stock_stmt->bind_param("i", $product_id);
+        $check_stock_stmt->execute();
+        $result = $check_stock_stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $product_name = $row['name'];  // Get product name
+
+            if ($row['stock'] < $quantity) {
+                throw new Exception("Insufficient stock for product: $product_name");
             }
 
             // Update stock in the products table
@@ -113,51 +119,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 SET stock = stock - ? 
                 WHERE id = ?
             ");
-
-            if ($update_stock_stmt === false) {
-                showAlert('Error', 'Error preparing stock update: ' . $conn->error, 'error');
-            }
-
             $update_stock_stmt->bind_param("ii", $quantity, $product_id);
 
             if (!$update_stock_stmt->execute()) {
-                showAlert('Error', 'Error updating stock: ' . $update_stock_stmt->error, 'error');
+                throw new Exception("Error updating stock for product: " . $product_name);
             }
 
-            // Get updated stock after order
-            $new_stock_stmt = $conn->prepare("SELECT stock FROM products WHERE id = ?");
-            $new_stock_stmt->bind_param("i", $product_id);
-            $new_stock_stmt->execute();
-            $new_result = $new_stock_stmt->get_result();
-
-            if ($new_result->num_rows > 0) {
-                $new_row = $new_result->fetch_assoc();
-                $new_stock = $new_row['stock'];
-
-                // Remove item from cart if quantity is zero
-                if ($new_stock <= 0) {
-                    $delete_cart_stmt = $conn->prepare("DELETE FROM cart WHERE product_id = ?");
-                    $delete_cart_stmt->bind_param("i", $product_id);
-                    $delete_cart_stmt->execute();
-                } else {
-                    // Update quantity in the cart
-                    $update_cart_stmt = $conn->prepare("
-                        UPDATE cart 
-                        SET quantity = quantity - ? 
-                        WHERE product_id = ? AND quantity > 0
-                    ");
-                    $update_cart_stmt->bind_param("ii", $quantity, $product_id);
-                    $update_cart_stmt->execute();
-                }
+            // Remove item from cart after successful stock update
+            $delete_cart_stmt = $conn->prepare("DELETE FROM cart WHERE product_id = ?");
+            $delete_cart_stmt->bind_param("i", $product_id);
+            if (!$delete_cart_stmt->execute()) {
+                throw new Exception("Error removing item from cart for product: " . $product_name);
             }
+        } else {
+            throw new Exception("Product '$product_id' not found.");
         }
-
-        // Order success
-        showAlert('Success', 'Your order has been placed successfully!', 'success');
-    } else {
-        showAlert('Error', 'Missing required form data.', 'error');
     }
+
+    // Commit the transaction
+    $conn->commit();
+
+    // Order success
+    showAlert('Success', 'Your order has been placed successfully!', 'success');
+
+} catch (Exception $e) {
+    // Rollback the transaction if an error occurs
+    $conn->rollback();
+
+    // Display error message
+    showAlert('Error', $e->getMessage(), 'error');
+}
+
+        }
+  
 } else {
     showAlert('Error', 'Invalid request method.', 'error');
 }
+
 ?>

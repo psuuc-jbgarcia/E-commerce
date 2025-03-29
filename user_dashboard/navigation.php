@@ -9,8 +9,8 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="dashboard.php" style="color: #FFFFFF;"><i class="fas fa-home me-1"></i> Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="cart.php" style="color: #FFFFFF;"><i class="fas fa-shopping-cart me-1"></i> Cart</a></li>
-                <li class="nav-item"><a class="nav-link" href="orders.php" style="color: #FFFFFF;"><i class="fas fa-box me-1"></i> Orders</a></li>
-                <li class="nav-item"><a class="nav-link" href="track_order.php" style="color: #FFFFFF;"><i class="fas fa-map-marker-alt me-1"></i> Track Order</a></li>
+                <li class="nav-item"><a class="nav-link" href="orders.php" style="color: #FFFFFF;"><i class="fas fa-box me-1"></i>My Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="track_order.php" style="color: #FFFFFF;"><i class="fas fa-map-marker-alt me-1"></i>Track Orders</a></li>
             </ul>
         </div>
 
@@ -21,10 +21,16 @@
                     3
                 </span>
             </button>
-            
-            <a class="nav-link fw-bold" href="logout.php" style="color: #F4D03F;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+
+            <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle" style="border-color: #F4D03F; color: #F4D03F;" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user"></i> Profile
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user-circle me-1"></i> My Profile</a></li>
+                    <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
+                </ul>
+            </div>
         </div>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

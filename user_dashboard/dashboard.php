@@ -113,13 +113,7 @@ if (!empty($params)) {
             border-top-right-radius: 12px;
         }
 
-        .footer {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-            margin-top: auto;
-        }
+     
      
     </style>
 </head>

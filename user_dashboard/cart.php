@@ -80,51 +80,58 @@ while ($row = $cart_result->fetch_assoc()) {
             </div>
         <?php } else { ?>
             <form id="checkout-form" action="process_checkout.php" method="POST">
-                <div class="row">
-                    <?php foreach ($cart_items as $item) { ?>
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($item['product_name']); ?></h5>
-                                    <input type="hidden" class="product-id" value="<?php echo htmlspecialchars($item['product_id']); ?>">
+    <div class="row g-4">
+        <?php foreach ($cart_items as $item) { ?>
+            <div class="col-md-4 mb-4">
+                <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; border: 1px solid #f0f0f0 !important; border-radius: 15px !important;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-center" style="font-size: 1.25rem !important; font-weight: bold !important;"><?php echo htmlspecialchars($item['product_name']); ?></h5>
+                        <input type="hidden" class="product-id" value="<?php echo htmlspecialchars($item['product_id']); ?>">
 
-                                    <img src="../uploads/<?php echo $item['image_name']; ?>" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px; object-fit: cover;">
-                                    <p class="card-text">
-                                        <strong>Quantity:</strong> <?php echo $item['quantity']; ?><br>
-                                        <strong>Price:</strong> ₱<?php echo number_format($item['price'], 2); ?><br>
-                                        <strong>Total:</strong> ₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
-                                    </p>
+                        <img src="https://www.collinsdictionary.com/images/full/apple_158989157.jpg" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important;">
+                        
+                        <p class="card-text mt-3" style="font-size: 1rem !important; color: #555 !important;">
+                            <strong>Quantity:</strong> <?php echo $item['quantity']; ?><br>
+                            <strong>Price:</strong> ₱<?php echo number_format($item['price'], 2); ?><br>
+                            <strong>Total:</strong> ₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
+                        </p>
 
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>">
-                                            <label for="item-<?php echo $item['id']; ?>">Select</label>
-                                        </div>
-                                        <div class="d-flex align-items-center border rounded p-1 bg-light">
-    <button type="button" class="btn btn-sm btn-outline-secondary quantity-decrease" data-item-id="<?php echo $item['id']; ?>">
-        <i class="fa fa-minus"></i>
-    </button>
-    <span class="mx-3 fw-bold quantity-display"><?php echo $item['quantity']; ?></span>
-    <button type="button" class="btn btn-sm btn-outline-secondary quantity-increase" data-item-id="<?php echo $item['id']; ?>">
-        <i class="fa fa-plus"></i>
-    </button>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="form-check" style="position: relative;">
+    <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>" class="form-check-input" style="position: absolute; opacity: 0 !important; z-index: 1 !important;">
+    <label for="item-<?php echo $item['id']; ?>" class="custom-checkbox-label" style="display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid #7D3C98; background-color: #fff; position: relative; cursor: pointer; transition: background-color 0.3s ease-in-out !important; z-index: 0 !important;">
+        <i class="fa fa-check" style="position: absolute; top: 3px; left: 3px; font-size: 16px; color: #7D3C98; opacity: 0; transition: opacity 0.3s ease-in-out !important;"></i>
+    </label>
 </div>
-                                    </div>
-                                </div>
+
+                            <div class="d-flex align-items-center border rounded p-2 bg-light" style="border: 1px solid #ddd !important; background-color: #f8f9fa !important;">
+                                <button type="button" class="btn btn-sm btn-outline-secondary quantity-decrease" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important;">
+                                    <i class="fa fa-minus" style="font-size: 1rem !important;"></i>
+                                </button>
+                                <span class="mx-3 fw-bold quantity-display" style="font-size: 1.1rem !important;"><?php echo $item['quantity']; ?></span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary quantity-increase" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important;">
+                                    <i class="fa fa-plus" style="font-size: 1rem !important;"></i>
+                                </button>
                             </div>
                         </div>
-                    <?php } ?>
+                    </div>
                 </div>
+            </div>
+        <?php } ?>
+    </div>
 
-                <div class="text-center">
-                    <button type="button" class="btn mt-3" id="checkoutBtn" 
-                    style="background-color: #7D3C98; color: #FFFFFF;" 
-                    onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#333333';" 
-                    onmouseout="this.style.backgroundColor='#7D3C98'; this.style.color='#FFFFFF';">
-                        Proceed to Checkout
-                    </button>
-                </div>
-            </form>
+    <div class="text-center mt-4">
+        <button type="button" class="btn btn-lg px-5 py-3" id="checkoutBtn" 
+        style="background-color: #7D3C98 !important; color: #FFFFFF !important; border-radius: 50px !important;" 
+        onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#333333';" 
+        onmouseout="this.style.backgroundColor='#7D3C98'; this.style.color='#FFFFFF';">
+            <i class="fa fa-shopping-cart"></i> Proceed to Checkout
+        </button>
+    </div>
+</form>
+
+
+
         <?php } ?>
     </div>
 
@@ -263,32 +270,37 @@ while ($row = $cart_result->fetch_assoc()) {
             selectedProducts = [];
 
             checkboxes.forEach((checkbox) => {
-                if (checkbox.checked) {
-                    const itemCard = checkbox.closest('.card-body');
-                    const itemName = itemCard.querySelector('.card-title').textContent.trim();
-                    const itemPrice = parseFloat(itemCard.querySelector('.card-text').querySelector('strong:nth-child(3)').nextSibling.textContent.replace('₱', '').trim());
-                    const itemQuantity = parseInt(itemCard.querySelector('.quantity-display').textContent.trim());
-                    const productId = itemCard.querySelector('.product-id').value;
+    if (checkbox.checked) {
+        const itemCard = checkbox.closest('.card-body');
+        const itemName = itemCard.querySelector('.card-title').textContent.trim();
+        const itemPrice = parseFloat(itemCard.querySelector('.card-text').querySelector('strong:nth-child(3)').nextSibling.textContent.replace('₱', '').trim());
+        const itemQuantity = parseInt(itemCard.querySelector('.quantity-display').textContent.trim());
+        const productId = itemCard.querySelector('.product-id').value;
 
-                    const itemTotal = itemPrice * itemQuantity;
-                    const itemShippingFee = 50 * itemQuantity;
-                    totalPrice += itemTotal + itemShippingFee;
-                    shippingFee += itemShippingFee;
+        const itemTotal = itemPrice * itemQuantity;
 
-                    selectedProducts.push({
-                        product_id: productId,
-                        item_name: itemName,
-                        quantity: itemQuantity,
-                        shipping_fee: itemShippingFee,
-                        item_total: itemTotal + itemShippingFee
-                    });
+        // Apply shipping fee as ₱50 per product, not per quantity
+        const itemShippingFee = 50; // Fixed shipping fee per product
 
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    listItem.innerHTML = `${itemName} (ID: ${productId}) - ₱${itemPrice} x ${itemQuantity} <span>+ Shipping: ₱${itemShippingFee.toFixed(2)}</span>`;
-                    selectedItemsList.appendChild(listItem);
-                }
-            });
+        totalPrice += itemTotal + itemShippingFee;
+        shippingFee += itemShippingFee;
+
+        selectedProducts.push({
+            product_id: productId,
+            item_name: itemName,
+            quantity: itemQuantity,
+            shipping_fee: itemShippingFee,
+            item_total: itemTotal + itemShippingFee
+        });
+
+        const listItem = document.createElement('li');
+        // (ID: ${productId})
+        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+        listItem.innerHTML = `${itemName}  - ₱${itemPrice} x ${itemQuantity} <span>+ Shipping: ₱${itemShippingFee.toFixed(2)}</span>`;
+        selectedItemsList.appendChild(listItem);
+    }
+});
+
 
             shippingFeeElement.textContent = shippingFee.toFixed(2);
             totalPriceElement.textContent = totalPrice.toFixed(2);
@@ -316,19 +328,23 @@ while ($row = $cart_result->fetch_assoc()) {
             });
 
             hiddenInputsContainer.innerHTML = `
-                <input type="hidden" name="product_ids[]" value="${productIds.join(',')}">
-                <input type="hidden" name="product_names[]" value="${itemNames.join(',')}">
-                <input type="hidden" name="quantities[]" value="${quantities.join(',')}">
-                <input type="hidden" name="payment_method" value="${paymentMethodSelect.value}">
-                <input type="hidden" name="shipping_fee_total" value="${shippingFee.toFixed(2)}">
-                <input type="hidden" name="grand_total" value="${totalPrice.toFixed(2)}">
-                <input type="hidden" name="tracking_code" value="${trackingCode}">
-            `;
+    ${productIds.map((id, index) => `
+        <input type="hidden" name="product_ids[]" value="${id}">
+        <input type="hidden" name="product_names[]" value="${itemNames[index]}">
+        <input type="hidden" name="quantities[]" value="${quantities[index]}">
+    `).join('')}
+    
+    <input type="hidden" name="payment_method" value="${paymentMethodSelect.value}">
+    <input type="hidden" name="shipping_fee_total" value="${shippingFee.toFixed(2)}">
+    <input type="hidden" name="grand_total" value="${totalPrice.toFixed(2)}">
+    <input type="hidden" name="tracking_code" value="${trackingCode}">
+`;
+
         }
     });
     </script>
-   <script>
- document.addEventListener("DOMContentLoaded", function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".quantity-increase, .quantity-decrease").forEach(button => {
             button.addEventListener("click", function () {
                 const itemId = this.getAttribute("data-item-id");
@@ -338,35 +354,54 @@ while ($row = $cart_result->fetch_assoc()) {
                 // Determine if increasing or decreasing
                 if (this.classList.contains("quantity-increase")) {
                     currentQuantity++;
-                } else if (this.classList.contains("quantity-decrease") && currentQuantity > 1) {
+                } else if (this.classList.contains("quantity-decrease") && currentQuantity > 0) {
                     currentQuantity--;
                 }
 
                 fetch("update_cart_quantity.php", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        item_id: itemId,
-        action: this.classList.contains("quantity-increase") ? "increase" : "decrease"
-    })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        location.reload(); // Reload page after success
-    } else {
-        alert("Failed to update quantity.");
-    }
-})
-.catch(error => console.error("Error:", error));
-
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        item_id: itemId,
+                        action: this.classList.contains("quantity-increase") ? "increase" : "decrease",
+                        quantity: currentQuantity
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (currentQuantity === 0) {
+                            // Remove the item from the DOM when quantity reaches zero
+                            this.closest('.col-md-4').remove();
+                        } else {
+                            // Update the displayed quantity
+                            quantityDisplay.textContent = currentQuantity;
+                        }
+                    } else {
+                        alert("Failed to update quantity.");
+                    }
+                })
+                .catch(error => console.error("Error:", error));
             });
         });
     });
 </script>
+<script>
+    document.querySelectorAll('.form-check-input').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            const label = this.nextElementSibling;
+            const checkmark = label.querySelector('i');
 
+            if (this.checked) {
+                checkmark.style.opacity = 1;
+            } else {
+                checkmark.style.opacity = 0;
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
