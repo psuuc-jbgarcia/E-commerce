@@ -22,7 +22,10 @@ if ($result_check->num_rows > 0) {
         session_start();
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
-        $_SESSION['email'] = $user['email']; // Add email to session
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['number'] = $user['phone'];
+        $_SESSION['address'] = $user['address'];
+         // Add email to session
 
         // Redirect with JavaScript after login
         echo "

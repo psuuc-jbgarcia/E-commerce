@@ -2,28 +2,41 @@
 session_start();
 require '../connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_SESSION['user_id'])) {
-        echo json_encode(["success" => false, "message" => "Not logged in"]);
-        exit();
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!$data || !isset($data['item_id']) || !isset($data['action'])) {
+    echo json_encode(['success' => false, 'error' => 'Invalid request']);
+    exit();
+}
+
+$item_id = intval($data['item_id']);
+$action = $data['action'];
+
+// Check if item exists in the cart
+$stmt = $conn->prepare("SELECT quantity FROM cart WHERE id = ?");
+$stmt->bind_param("i", $item_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1) {
+    $row = $result->fetch_assoc();
+    $quantity = $row['quantity'];
+
+    if ($action === 'increase') {
+        $quantity++;
+    } elseif ($action === 'decrease' && $quantity > 1) {
+        $quantity--;
     }
 
-    $cart_id = intval($_POST['cart_id']);
-    $quantity = intval($_POST['quantity']);
-
-    if ($quantity < 1) {
-        echo json_encode(["success" => false, "message" => "Invalid quantity"]);
+    // Update quantity in the cart
+    $update_stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
+    $update_stmt->bind_param("ii", $quantity, $item_id);
+    if ($update_stmt->execute()) {
+        echo json_encode(['success' => true, 'quantity' => $quantity]);
         exit();
-    }
-
-    $sql = "UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iii", $quantity, $cart_id, $_SESSION['user_id']);
-    
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false, "message" => "Database error"]);
     }
 }
+
+// If something goes wrong
+echo json_encode(['success' => false, 'error' => 'Failed to update quantity']);
 ?>

@@ -1,20 +1,43 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="dashboard.php"><i class="fas fa-store me-1"></i> Small Shop</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #7D3C98; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
+    <div class="container d-flex justify-content-between align-items-center">
+
+        <a class="navbar-brand fw-bold" href="dashboard.php" style="color: #F4D03F;">
+            <i class="fas fa-store me-1"></i> Small Shop
+        </a>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="dashboard.php"><i class="fas fa-home me-1"></i> Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart me-1"></i> Cart</a></li>
-                <li class="nav-item"><a class="nav-link" href="orders.php"><i class="fas fa-box me-1"></i> Orders</a></li>
-                <li class="nav-item"><a class="nav-link" href="track_order.php"><i class="fas fa-map-marker-alt me-1"></i> Track Order</a></li>
-                <li class="nav-item">
-                <a class="nav-link" href="logout.php">Logout</a>
-            </li>
+                <li class="nav-item"><a class="nav-link" href="dashboard.php" style="color: #FFFFFF;"><i class="fas fa-home me-1"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="cart.php" style="color: #FFFFFF;"><i class="fas fa-shopping-cart me-1"></i> Cart</a></li>
+                <li class="nav-item"><a class="nav-link" href="orders.php" style="color: #FFFFFF;"><i class="fas fa-box me-1"></i> Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="track_order.php" style="color: #FFFFFF;"><i class="fas fa-map-marker-alt me-1"></i> Track Order</a></li>
             </ul>
         </div>
+
+        <div class="d-flex align-items-center">
+            <button class="btn btn-outline-light position-relative me-3" style="border-color: #F4D03F; color: #F4D03F;">
+                <i class="fas fa-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    3
+                </span>
+            </button>
+            
+            <a class="nav-link fw-bold" href="logout.php" style="color: #F4D03F;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: #F4D03F;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
     </div>
 </nav>
+
+<!-- Add a margin-top to the content below the navbar to prevent it from being hidden -->
+<div style="margin-top: 80px;"> <!-- Adjust this value based on your navbar height -->
+    <!-- Your page content goes here -->
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">

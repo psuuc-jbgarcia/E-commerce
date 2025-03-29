@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../authentication/login.php");
     exit();
 }
 require '../connection.php';
@@ -51,8 +51,8 @@ if (!empty($params)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - Browse Products</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/global.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    <link rel="stylesheet" href="../static/css/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -61,9 +61,6 @@ if (!empty($params)) {
             box-sizing: border-box;
         }
 
-      
-     
-
         .content {
             flex: 1;
             margin-top: 90px;
@@ -71,7 +68,7 @@ if (!empty($params)) {
         }
 
         .filter-section {
-            background-color: #fff;
+            background-color: #F5EEF8;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -85,14 +82,14 @@ if (!empty($params)) {
         }
 
         .btn-primary {
-            background-color: #4A90E2;
+            background-color: #7D3C98;
             border: none;
             padding: 10px 16px;
             border-radius: 8px;
         }
 
         .btn-primary:hover {
-            background-color: #357ABD;
+            background-color: #5B2C6F;
             transition: 0.3s;
         }
 
@@ -100,7 +97,7 @@ if (!empty($params)) {
             transition: transform 0.3s, box-shadow 0.3s;
             border-radius: 12px;
             overflow: hidden;
-            background-color: #fff;
+            background-color: #F5EEF8;
         }
 
         .card:hover {
@@ -123,6 +120,7 @@ if (!empty($params)) {
             text-align: center;
             margin-top: auto;
         }
+     
     </style>
 </head>
 
@@ -157,64 +155,59 @@ if (!empty($params)) {
 
         <!-- Products Display -->
         <div class="row">
-        <?php
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-?>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="../uploads/<?php echo $row['image_name']; ?>" class="card-img-top product-img" alt="<?php echo $row['name']; ?>">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold"><?php echo $row['name']; ?></h5>
-                    <p class="card-text text-muted"><?php echo $row['description']; ?></p>
-                    <h6 class="text-success fw-bold mb-1">₱<?php echo number_format($row['price'], 2); ?></h6>
-                    <h6 class="text-info mb-3">
-    <?php 
-        $stock = $row['stock'];
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+            ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="../uploads/<?php echo $row['image_name']; ?>" class="card-img-top product-img" alt="<?php echo $row['name']; ?>">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold"><?php echo $row['name']; ?></h5>
+                                <p class="card-text text-muted"><?php echo $row['description']; ?></p>
+                                <h6 class="text-success fw-bold mb-1">₱<?php echo number_format($row['price'], 2); ?></h6>
+                                <h6 class="text-info mb-3">
+                                    <?php
+                                    $stock = $row['stock'];
+                                    if ($stock == 0) {
+                                        echo '<span class="text-danger">Out of Stock</span>';
+                                    } elseif ($stock <= 5) {
+                                        echo '<span class="text-warning">Low Stock: ' . $stock . ' available</span>';
+                                    } else {
+                                        echo 'Stock: ' . $stock . ' available';
+                                    }
+                                    ?>
+                                </h6>
 
-        if ($stock == 0) {
-            echo '<span class="text-danger">Out of Stock</span>';
-        } elseif ($stock <= 5) {
-            echo '<span class="text-warning">Low Stock: ' . $stock . ' available</span>';
-        } else {
-            echo 'Stock: ' . $stock . ' available';
-        }
-    ?>
-</h6>
+                                <?php if ($row['stock'] > 0) { ?>
+                                    <form action="add_to_cart.php" method="POST">
+                                        <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                        <input type="hidden" name="price" value="<?php echo $row['price']; ?>">
+                                        <input type="hidden" name="image_name" value="<?php echo $row['image_name']; ?>">
 
-                    <?php if ($row['stock'] > 0) { ?>
-                        <form action="add_to_cart.php" method="POST">
-                            <!-- Hidden inputs to pass the product details to the add_to_cart.php script -->
-                            <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
-                            <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
-                            <input type="hidden" name="price" value="<?php echo $row['price']; ?>">
-                            <input type="hidden" name="image_name" value="<?php echo $row['image_name']; ?>">
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="quantity" class="form-control" min="1" max="<?php echo $row['stock']; ?>" value="1" required>
+                                            <span class="input-group-text">x</span>
+                                            <span class="input-group-text">₱<?php echo number_format($row['price'], 2); ?></span>
+                                        </div>
 
-                            <!-- Quantity input field -->
-                            <div class="input-group mb-3">
-                                <input type="number" name="quantity" class="form-control" min="1" max="<?php echo $row['stock']; ?>" value="1" required>
-                                <span class="input-group-text">x</span>
-                                <span class="input-group-text">₱<?php echo number_format($row['price'], 2); ?></span>
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                        </button>
+                                    </form>
+                                <?php } else { ?>
+                                    <button class="btn btn-secondary w-100" disabled><i class="fas fa-ban me-1"></i> Out of Stock</button>
+                                <?php } ?>
                             </div>
-
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-cart-plus me-1"></i> Add to Cart
-                            </button>
-                        </form>
-                    <?php } else { ?>
-                        <button class="btn btn-secondary w-100" disabled><i class="fas fa-ban me-1"></i> Out of Stock</button>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-<?php
-    }
-} else {
-    echo "<h5 class='text-center text-danger'>No products found!</h5>";
-}
-?>
-
-
+                        </div>
+                    </div>
+            <?php
+                }
+            } else {
+                echo "<h5 class='text-center text-danger'>No products found!</h5>";
+            }
+            ?>
         </div>
     </div>
 
@@ -234,6 +227,7 @@ if ($result->num_rows > 0) {
         // Auto-filter on category change
         document.getElementById('categoryFilter').addEventListener('change', applyFilters);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -34,17 +34,18 @@
         }
 
         .btn-primary {
-            background-color: #4A90E2;
+            background-color: #7D3C98;
             border: none;
             transition: all 0.3s;
         }
 
         .btn-primary:hover {
-            background-color: #357ABD;
+            background-color: #F4D03F;
+            color: #333333;
         }
 
         .btn-warning {
-            background-color: #FFC107;
+            background-color: #F4D03F;
             color: #333333;
         }
 
@@ -54,21 +55,21 @@
 
         .input-group-text {
             cursor: pointer;
-            background-color: #4A90E2;
+            background-color: #7D3C98;
             color: #FFFFFF;
         }
 
         .form-control:focus {
-            border-color: #4A90E2;
-            box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
+            border-color: #7D3C98;
+            box-shadow: 0 0 8px rgba(125, 60, 152, 0.5);
         }
 
         a {
-            color: #4A90E2;
+            color: #7D3C98;
         }
 
         a:hover {
-            color: #357ABD;
+            color: #F4D03F;
         }
     </style>
 </head>
@@ -76,7 +77,7 @@
 <body>
     <div class="form-container">
         <img src="https://via.placeholder.com/100" alt="Logo" class="logo">
-        <h3 class="text-center fw-bold mb-4" style="color: #4A90E2;"><i class="fas fa-sign-in-alt me-1"></i> Login</h3>
+        <h3 class="text-center fw-bold mb-4" style="color: #7D3C98;"><i class="fas fa-sign-in-alt me-1"></i> Login</h3>
         <form id="loginForm" action="logingin.php" method="POST" onsubmit="return validateForm(event)">
             <div class="mb-3">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
