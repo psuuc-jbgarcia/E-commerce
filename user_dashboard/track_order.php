@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 require '../connection.php';
 
@@ -21,12 +21,59 @@ while ($row = $result->fetch_assoc()) {
     <title>Track Orders - Small Shop Inventory</title>
     <link rel="stylesheet" href="../static/css/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
-    /* Updated Tab Styling for Better Visibility */
+ 
+    .parent {
+        display: grid;
+        grid-template-columns: 2.5fr 1.5fr;
+        grid-template-rows: auto auto;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .div1 {
+        grid-column: span 1;
+        grid-row: span 2;
+        width: 100%;
+    }
+
+    .div2 {
+        grid-column: span 1;
+        margin-top: 0;
+    }
+
+    .div3 {
+    grid-column: span 3;
+    grid-row-start: 5;
+    display: flex;
+    justify-content: space-around;
+    background-color:  #7D3C98 ; 
+    border: 3px solid #d4af37; 
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(218, 165, 32, 0.5);
+    margin-bottom: 70px;
+}
+
+
+    .order-status-icon {
+        font-size: 36px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .inactive-icon {
+        opacity: 0.5;
+    }
+
+    .active-icon {
+        color: #ffc107;
+        text-shadow: 0 0 15px #ffc107;
+    }
+
     .nav-tabs .nav-link {
         background-color: #343a40;
         color: #fff;
-        border: none;
     }
 
     .nav-tabs .nav-link.active {
@@ -35,229 +82,153 @@ while ($row = $result->fetch_assoc()) {
         font-weight: bold;
     }
 
-    .nav-tabs .nav-link:hover {
-        background-color: #495057;
-        color: #fff;
-    }
-
-    /* Golden Yellow Card Styling */
     .order-card {
-        margin-bottom: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: none;
-        background-color: #ffd700; /* Golden Yellow */
-    }
-
-    .order-card-header {
-        background-color: #ffcc00;
+        background-color: #fff;
         padding: 15px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        font-weight: bold;
-        font-size: 1.2rem;
-        color: #000;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #ffc107;
+        transition: all 0.3s ease-in-out;
     }
 
-    .order-card-body p {
-        color: #000;
+    .order-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    /* Order Tracking UI */
-    .tracking-container {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        margin-top: 20px;
+    .cancelled-container {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(255, 0, 0, 0.1);
     }
 
-    .tracking-header {
+    .cancelled-title {
         font-size: 1.5rem;
         font-weight: bold;
-        color: #343a40;
+        color: #721c24;
+        margin-bottom: 10px;
     }
 
-    .tracking-progress {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-        padding: 20px 0;
+    .cancelled-card {
+        background-color: #f8d7da;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #f5c6cb;
+        margin-bottom: 10px;
     }
 
-    .tracking-progress .step {
-        position: relative;
-        width: 100%;
+    .div3 div {
         text-align: center;
+        padding: 10px;
     }
 
-    .tracking-progress .step .icon {
-        background: #6c5ce7;
-        color: #fff;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        border-radius: 50%;
-        display: inline-block;
+    .div3 p {
+        margin-top: 5px;
+        font-weight: bold;
     }
 
-    .tracking-progress .line {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: #6c5ce7;
-        z-index: -1;
-    }
-
-    .tracking-status {
-        display: flex;
-        justify-content: space-around;
-        margin-top: 20px;
-    }
-
-    .tracking-status div {
-        text-align: center;
-    }
-</style>
-
+    </style>
 </head>
 
 <body>
     <?php include 'navigation.php'; ?>
 
-    <div class="container mt-5">
+    <div class="container parent">
 
-        <!-- Tab Navigation -->
-        <ul class="nav nav-tabs" id="orderStatusTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="true">Pending</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="received-tab" data-bs-toggle="tab" href="#received" role="tab" aria-controls="received" aria-selected="false">To Receive</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="delivered-tab" data-bs-toggle="tab" href="#delivered" role="tab" aria-controls="delivered" aria-selected="false">Delivered</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="cancelled-tab" data-bs-toggle="tab" href="#cancelled" role="tab" aria-controls="cancelled" aria-selected="false">Cancelled</a>
-            </li>
-        </ul>
+        <!-- Tabs Section -->
+        <div class="div1">
+            <ul class="nav nav-tabs" id="orderStatusTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending">Pending</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="received-tab" data-bs-toggle="tab" href="#received">To Receive</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="delivered-tab" data-bs-toggle="tab" href="#delivered">Delivered</a>
+                </li>
+            </ul>
 
-        <!-- Tab Content -->
-        <div class="tab-content" id="orderStatusTabContent">
-            <!-- Pending Orders -->
-            <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
-                <?php if (isset($orders['Pending'])): ?>
-                    <div class="row mt-4">
+            <div class="tab-content">
+                <!-- Pending Orders -->
+                <div class="tab-pane fade show active" id="pending">
+                    <?php if (isset($orders['Pending'])): ?>
                         <?php foreach ($orders['Pending'] as $order): ?>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card order-card">
-                                    <div class="order-card-header">
-                                        Order #<?php echo $order['order_id']; ?>
-                                    </div>
-                                    <div class="order-card-body">
-                                        <p><strong>Tracking Code:</strong> <?php echo $order['tracking_code']; ?></p>
-                                        <p><strong>Products:</strong> <?php echo $order['product_names']; ?></p>
-                                        <p><strong>Quantities:</strong> <?php echo $order['quantities']; ?></p>
-                                        <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
-                                        <p><strong>Shipping Fee:</strong> $<?php echo number_format($order['shipping_fee_total'], 2); ?></p>
-                                        <p><strong>Grand Total:</strong> $<?php echo number_format($order['grand_total'], 2); ?></p>
-                                        <p><strong>Order Date:</strong> <?php echo date('F j, Y', strtotime($order['order_date'])); ?></p>
-                                    </div>
-                                </div>
+                            <div class="order-card">
+                                <strong>Order #<?php echo $order['order_id']; ?></strong>
+                                <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
                             </div>
                         <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p>No pending orders.</p>
-                <?php endif; ?>
-            </div>
+                    <?php else: ?>
+                        <p>No pending orders.</p>
+                    <?php endif; ?>
+                </div>
 
-            <!-- To Receive Orders -->
-            <div class="tab-pane fade" id="received" role="tabpanel" aria-labelledby="received-tab">
-                <?php if (isset($orders['To Receive'])): ?>
-                    <div class="row mt-4">
+                <!-- To Receive Orders -->
+                <div class="tab-pane fade" id="received">
+                    <?php if (isset($orders['To Receive'])): ?>
                         <?php foreach ($orders['To Receive'] as $order): ?>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card order-card">
-                                    <div class="order-card-header">
-                                        Order #<?php echo $order['order_id']; ?>
-                                    </div>
-                                    <div class="order-card-body">
-                                        <p><strong>Tracking Code:</strong> <?php echo $order['tracking_code']; ?></p>
-                                        <p><strong>Products:</strong> <?php echo $order['product_names']; ?></p>
-                                        <p><strong>Quantities:</strong> <?php echo $order['quantities']; ?></p>
-                                        <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
-                                        <p><strong>Shipping Fee:</strong> $<?php echo number_format($order['shipping_fee_total'], 2); ?></p>
-                                        <p><strong>Grand Total:</strong> $<?php echo number_format($order['grand_total'], 2); ?></p>
-                                        <p><strong>Order Date:</strong> <?php echo date('F j, Y', strtotime($order['order_date'])); ?></p>
-                                    </div>
-                                </div>
+                            <div class="order-card">
+                                <strong>Order #<?php echo $order['order_id']; ?></strong>
+                                <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
                             </div>
                         <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p>No orders to receive.</p>
-                <?php endif; ?>
-            </div>
+                    <?php else: ?>
+                        <p>No orders to receive.</p>
+                    <?php endif; ?>
+                </div>
 
-            <!-- Delivered Orders -->
-            <div class="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
-                <?php if (isset($orders['Delivered'])): ?>
-                    <div class="row mt-4">
+                <!-- Delivered Orders -->
+                <div class="tab-pane fade" id="delivered">
+                    <?php if (isset($orders['Delivered'])): ?>
                         <?php foreach ($orders['Delivered'] as $order): ?>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card order-card">
-                                    <div class="order-card-header">
-                                        Order #<?php echo $order['order_id']; ?>
-                                    </div>
-                                    <div class="order-card-body">
-                                        <p><strong>Tracking Code:</strong> <?php echo $order['tracking_code']; ?></p>
-                                        <p><strong>Products:</strong> <?php echo $order['product_names']; ?></p>
-                                        <p><strong>Quantities:</strong> <?php echo $order['quantities']; ?></p>
-                                        <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
-                                        <p><strong>Shipping Fee:</strong> $<?php echo number_format($order['shipping_fee_total'], 2); ?></p>
-                                        <p><strong>Grand Total:</strong> $<?php echo number_format($order['grand_total'], 2); ?></p>
-                                        <p><strong>Order Date:</strong> <?php echo date('F j, Y', strtotime($order['order_date'])); ?></p>
-                                    </div>
-                                </div>
+                            <div class="order-card">
+                                <strong>Order #<?php echo $order['order_id']; ?></strong>
+                                <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
                             </div>
                         <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p>No delivered orders.</p>
-                <?php endif; ?>
+                    <?php else: ?>
+                        <p>No delivered orders.</p>
+                    <?php endif; ?>
+                </div>
             </div>
+        </div>
+<!-- Cancelled Orders Section -->
+<div class="div2">
+    <div class="cancelled-container">
+        <p class="cancelled-title"><i class="fa-solid fa-ban me-2"></i>Cancelled Orders</p>
+        <?php if (isset($orders['Cancelled'])): ?>
+            <?php foreach ($orders['Cancelled'] as $order): ?>
+                <div class="cancelled-card">
+                    <strong>Order #<?php echo $order['order_id']; ?></strong>
+                    <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
+                    <p><strong>Products:</strong> <?php echo $order['product_names']; ?></p>
+                    <p><strong>Grand Total:</strong> ₱<?php echo number_format($order['grand_total'], 2); ?></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No cancelled orders.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
-            <!-- Cancelled Orders -->
-            <div class="tab-pane fade" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab">
-                <?php if (isset($orders['Cancelled'])): ?>
-                    <div class="row mt-4">
-                        <?php foreach ($orders['Cancelled'] as $order): ?>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card order-card">
-                                    <div class="order-card-header">
-                                        Order #<?php echo $order['order_id']; ?>
-                                    </div>
-                                    <div class="order-card-body">
-                                        <p><strong>Tracking Code:</strong> <?php echo $order['tracking_code']; ?></p>
-                                        <p><strong>Products:</strong> <?php echo $order['product_names']; ?></p>
-                                        <p><strong>Quantities:</strong> <?php echo $order['quantities']; ?></p>
-                                        <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
-                                        <p><strong>Shipping Fee:</strong> $<?php echo number_format($order['shipping_fee_total'], 2); ?></p>
-                                        <p><strong>Grand Total:</strong> $<?php echo number_format($order['grand_total'], 2); ?></p>
-                                        <p><strong>Order Date:</strong> <?php echo date('F j, Y', strtotime($order['order_date'])); ?></p>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php else: ?>
-                    <p>No cancelled orders.</p>
-                <?php endif; ?>
+
+        <!-- Status Icons Section -->
+        <div class="div3">
+            <div>
+                <i class="fa-solid fa-clock order-status-icon inactive-icon" id="pending-icon"></i>
+                <p>Pending</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-truck order-status-icon inactive-icon" id="received-icon"></i>
+                <p>To Receive</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-box-open order-status-icon inactive-icon" id="delivered-icon"></i>
+                <p>Delivered</p>
             </div>
         </div>
     </div>
@@ -265,8 +236,43 @@ while ($row = $result->fetch_assoc()) {
     <div class="footer">
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".nav-link");
+        const icons = {
+            "pending-tab": "pending-icon",
+            "received-tab": "received-icon",
+            "delivered-tab": "delivered-icon"
+        };
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        // Function to update icon styles
+        function updateIcons(activeTab) {
+            Object.keys(icons).forEach(tab => {
+                const icon = document.getElementById(icons[tab]);
+                if (tab === activeTab) {
+                    icon.classList.add("active-icon");
+                    icon.classList.remove("inactive-icon");
+                } else {
+                    icon.classList.add("inactive-icon");
+                    icon.classList.remove("active-icon");
+                }
+            });
+        }
+
+        // Set the default active icon to Pending
+        updateIcons("pending-tab");
+
+        // Attach event listeners to tabs
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function () {
+                updateIcons(this.id);
+            });
+        });
+    });
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

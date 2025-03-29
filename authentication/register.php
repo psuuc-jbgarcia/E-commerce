@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Small Shop Inventory</title>
+    <title>Register - Golden Mart Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         body {
-            background-color: #f0f2f5;
+            background-color: rgb(66, 36, 78);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,15 +21,28 @@
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            width: 100%;
-            max-width: 500px;
-            position: relative;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .form-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
         .logo {
-            width: 100px;
-            margin: 0 auto 20px auto;
+            width: 120px;
             display: block;
+            margin: 0 auto 10px;
+        }
+
+        .system-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #7D3C98;
+            margin-bottom: 20px;
         }
 
         .btn-primary {
@@ -44,13 +56,9 @@
             color: #333333;
         }
 
-        .btn-warning {
-            background-color: #F4D03F;
-            color: #333333;
-        }
-
-        .btn-warning:hover {
-            background-color: #E0A800;
+        .form-control:focus {
+            border-color: #7D3C98;
+            box-shadow: 0 0 8px rgba(125, 60, 152, 0.5);
         }
 
         .input-group-text {
@@ -59,107 +67,132 @@
             color: #FFFFFF;
         }
 
-        .form-control:focus {
-            border-color: #7D3C98;
-            box-shadow: 0 0 8px rgba(125, 60, 152, 0.5);
+        @media (max-width: 768px) {
+            .form-content {
+                grid-template-columns: 1fr;
+            }
         }
 
-        a {
-            color: #7D3C98;
-        }
-
-        a:hover {
-            color: #F4D03F;
+        .text-danger {
+            font-size: 0.875rem;
         }
     </style>
 </head>
 
 <body>
     <div class="form-container">
-        <img src="https://via.placeholder.com/100" alt="Logo" class="logo">
-        <h3 class="text-center fw-bold mb-4" style="color: #7D3C98;"><i class="fas fa-user-plus me-1"></i> Register</h3>
+        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="Shop Logo" class="logo">
+        <div class="system-title">Golden Mart Inventory</div>
+
         <form id="registerForm" action="register_user.php" method="POST" onsubmit="return validateForm()">
-            <div class="mb-3">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Full Name">
-            </div>
-            <div class="mb-3">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-            </div>
-            <div class="mb-3">
-                <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
-            </div>
-            <div class="mb-3">
-                <textarea class="form-control" id="address" name="address" rows="2" placeholder="Address"></textarea>
-            </div>
-            <div class="mb-3">
-                <div class="input-group">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                    <span class="input-group-text" onclick="togglePassword('password', 'eyeIcon')">
-                        <i id="eyeIcon" class="fas fa-eye"></i>
-                    </span>
+            <div class="form-content">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Full Name">
+                    <small class="text-danger" id="nameError"></small>
+                </div>
+                <div class="mb-3">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                    <small class="text-danger" id="emailError"></small>
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
+                    <small class="text-danger" id="phoneError"></small>
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" id="address" name="address" rows="2" placeholder="Address"></textarea>
+                    <small class="text-danger" id="addressError"></small>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        <span class="input-group-text" onclick="togglePassword('password', 'eyeIcon')">
+                            <i id="eyeIcon" class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <small class="text-danger" id="passwordError"></small>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            placeholder="Confirm Password">
+                        <span class="input-group-text" onclick="togglePassword('confirm_password', 'eyeIconConfirm')">
+                            <i id="eyeIconConfirm" class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <small class="text-danger" id="confirmPasswordError"></small>
                 </div>
             </div>
-            <div class="mb-3">
-                <div class="input-group">
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                        placeholder="Confirm Password">
-                    <span class="input-group-text" onclick="togglePassword('confirm_password', 'eyeIconConfirm')">
-                        <i id="eyeIconConfirm" class="fas fa-eye"></i>
-                    </span>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 mb-3"><i class="fas fa-user-plus me-1"></i> Register</button>
+            <button type="submit" class="btn btn-primary w-100 mt-3"><i class="fas fa-user-plus me-1"></i> Register</button>
+            <p class="text-center mt-3">Already have an account? <a href="login.php" style="color: #7D3C98;">Login</a></p>
         </form>
-        <p class="text-center">Already have an account? <a href="login.php">Login</a></p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function validateForm() {
+            let valid = true;
+
+            document.getElementById("nameError").innerText = "";
+            document.getElementById("emailError").innerText = "";
+            document.getElementById("phoneError").innerText = "";
+            document.getElementById("addressError").innerText = "";
+            document.getElementById("passwordError").innerText = "";
+            document.getElementById("confirmPasswordError").innerText = "";
+
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const address = document.getElementById('address').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirm_password = document.getElementById('confirm_password').value.trim();
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const phoneRegex = /^[0-9]{10,11}$/;
 
-            if (name === '' || email === '' || phone === '' || address === '' || password === '' || confirm_password === '') {
-                Swal.fire({ icon: 'error', title: 'Oops...', text: 'All fields are required!' });
-                return false;
+            if (name === '') {
+                document.getElementById("nameError").innerText = "Full Name is required.";
+                valid = false;
             }
-            if (!emailRegex.test(email)) {
-                Swal.fire({ icon: 'error', title: 'Invalid Email!', text: 'Please enter a valid email address.' });
-                return false;
+            if (email === '') {
+                document.getElementById("emailError").innerText = "Email Address is required.";
+                valid = false;
+            } else if (!emailRegex.test(email)) {
+                document.getElementById("emailError").innerText = "Invalid email format.";
+                valid = false;
             }
-            if (!phoneRegex.test(phone)) {
-                Swal.fire({ icon: 'error', title: 'Invalid Phone Number!', text: 'Phone number must be 10-11 digits.' });
-                return false;
+            if (phone === '') {
+                document.getElementById("phoneError").innerText = "Phone Number is required.";
+                valid = false;
+            } else if (!phoneRegex.test(phone)) {
+                document.getElementById("phoneError").innerText = "Phone number must be 10-11 digits.";
+                valid = false;
             }
-            if (password.length < 6) {
-                Swal.fire({ icon: 'error', title: 'Weak Password!', text: 'Password must be at least 6 characters.' });
-                return false;
+            if (address === '') {
+                document.getElementById("addressError").innerText = "Address is required.";
+                valid = false;
             }
-            if (password !== confirm_password) {
-                Swal.fire({ icon: 'error', title: 'Password Mismatch!', text: 'Passwords do not match!' });
-                return false;
+            if (password === '') {
+                document.getElementById("passwordError").innerText = "Password is required.";
+                valid = false;
+            } else if (password.length < 6) {
+                document.getElementById("passwordError").innerText = "Password must be at least 6 characters.";
+                valid = false;
             }
-            return true;
+            if (confirm_password === '') {
+                document.getElementById("confirmPasswordError").innerText = "Confirm Password is required.";
+                valid = false;
+            } else if (password !== confirm_password) {
+                document.getElementById("confirmPasswordError").innerText = "Passwords do not match.";
+                valid = false;
+            }
+            return valid;
         }
 
         function togglePassword(fieldId, eyeIconId) {
             const passwordField = document.getElementById(fieldId);
             const eyeIcon = document.getElementById(eyeIconId);
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = "password";
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
         }
     </script>
 </body>

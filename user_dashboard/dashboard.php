@@ -186,9 +186,28 @@ if (!empty($params)) {
                                             <span class="input-group-text">₱<?php echo number_format($row['price'], 2); ?></span>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary w-100">
-                                            <i class="fas fa-cart-plus me-1"></i> Add to Cart
-                                        </button>
+                                        <div class="d-grid gap-2 mt-3">
+    <button type="submit" class="btn w-100" 
+        style="background-color: #7D3C98 !important; color: #FFFFFF !important; border: 2px solid #5B2C6F !important; border-radius: 8px !important; padding: 10px 0 !important; transition: background-color 0.3s ease-in-out !important;"
+        onmouseover="this.style.backgroundColor='#5B2C6F';" 
+        onmouseout="this.style.backgroundColor='#7D3C98';">
+        <i class="fas fa-cart-plus me-1"></i> Add to Cart
+    </button>
+
+    <!-- Buy Now Button -->
+<button type="button" class="btn w-100" 
+    style="background-color: #FFD700 !important; color: #333333 !important; border: 2px solid #FFC107 !important; border-radius: 8px !important; padding: 10px 0 !important; transition: background-color 0.3s ease-in-out !important;"
+    data-bs-toggle="modal" data-bs-target="#buyNowModal"
+    onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#000000';" 
+    onmouseout="this.style.backgroundColor='#FFD700'; this.style.color='#333333';">
+    <i class="fas fa-bolt me-1"></i> Buy Now
+</button>
+
+
+
+
+</div>
+
                                     </form>
                                 <?php } else { ?>
                                     <button class="btn btn-secondary w-100" disabled><i class="fas fa-ban me-1"></i> Out of Stock</button>
@@ -204,7 +223,23 @@ if (!empty($params)) {
             ?>
         </div>
     </div>
-
+<!-- Buy Now Modal -->
+<div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px !important;">
+            <div class="modal-header" style="background-color: #7D3C98 !important; color: #FFFFFF !important; border-top-left-radius: 15px !important; border-top-right-radius: 15px !important;">
+                <h5 class="modal-title" id="buyNowModalLabel"><i class="fas fa-tools me-2"></i> Feature Under Development</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center" style="font-size: 1.1rem !important; color: #333333 !important;">
+                🚧 This feature is currently under development. Please check back later!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 8px !important;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
     <div class="footer">
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>

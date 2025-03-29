@@ -1,3 +1,7 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #7D3C98; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
     <div class="container d-flex justify-content-between align-items-center">
 
@@ -7,10 +11,26 @@
 
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="dashboard.php" style="color: #FFFFFF;"><i class="fas fa-home me-1"></i> Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="cart.php" style="color: #FFFFFF;"><i class="fas fa-shopping-cart me-1"></i> Cart</a></li>
-                <li class="nav-item"><a class="nav-link" href="orders.php" style="color: #FFFFFF;"><i class="fas fa-box me-1"></i>My Orders</a></li>
-                <li class="nav-item"><a class="nav-link" href="track_order.php" style="color: #FFFFFF;"><i class="fas fa-map-marker-alt me-1"></i>Track Orders</a></li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>" href="dashboard.php">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo ($current_page == 'cart.php') ? 'active' : ''; ?>" href="cart.php">
+                        <i class="fas fa-shopping-cart me-1"></i> Cart
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo ($current_page == 'orders.php') ? 'active' : ''; ?>" href="orders.php">
+                        <i class="fas fa-box me-1"></i> My Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo ($current_page == 'track_order.php') ? 'active' : ''; ?>" href="track_order.php">
+                        <i class="fas fa-map-marker-alt me-1"></i> Track Orders
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -42,8 +62,18 @@
 </nav>
 
 <!-- Add a margin-top to the content below the navbar to prevent it from being hidden -->
-<div style="margin-top: 80px;"> <!-- Adjust this value based on your navbar height -->
+<div style="margin-top: 80px;">
     <!-- Your page content goes here -->
 </div>
+
+<!-- Custom Styles to Highlight Active Menu -->
+<style>
+    .nav-link.active {
+        background-color: #F4D03F !important;
+        color: #333333 !important;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+</style>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">

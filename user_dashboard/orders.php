@@ -10,11 +10,12 @@ if (!isset($_SESSION['email'])) {
 $email = $_SESSION['email'];
 
 $sql = "
-    SELECT order_id, tracking_code, product_names, order_status, grand_total, order_date, shipping_address,quantities, payment_method,shipping_address
+    SELECT order_id, tracking_code, product_ids, product_names, quantities, order_status, grand_total, order_date, shipping_address, payment_method
     FROM orders 
     WHERE username = ? 
-    ORDER BY order_date DESC
+    ORDER BY order_date DESC, order_id DESC
 ";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -22,24 +23,63 @@ $result = $stmt->get_result();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     $order_id = intval($_POST['order_id']);
-    $cancel_stmt = $conn->prepare("UPDATE orders SET order_status = 'Cancelled' WHERE order_id = ? AND username = ? AND order_status = 'Pending'");
-    $cancel_stmt->bind_param("is", $order_id, $email);
-    if ($cancel_stmt->execute()) {
-        echo "
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Order has been cancelled successfully!',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = 'orders.php';
+
+    // Fetch product_ids and quantities for the order being cancelled
+    $order_query = $conn->prepare("SELECT product_ids, quantities FROM orders WHERE order_id = ? AND username = ? AND order_status = 'Pending'");
+    $order_query->bind_param("is", $order_id, $email);
+    $order_query->execute();
+    $order_result = $order_query->get_result();
+
+    if ($order_result->num_rows > 0) {
+        $order_data = $order_result->fetch_assoc();
+        $product_ids = explode(",", $order_data['product_ids']);
+        $quantities = explode(",", $order_data['quantities']);
+
+        // Cancel the order and update status
+        $cancel_stmt = $conn->prepare("UPDATE orders SET order_status = 'Cancelled' WHERE order_id = ? AND username = ? AND order_status = 'Pending'");
+        $cancel_stmt->bind_param("is", $order_id, $email);
+
+        if ($cancel_stmt->execute()) {
+            // Restock the product quantities
+            foreach ($product_ids as $index => $product_id) {
+                $product_id = intval(trim($product_id)); // Trim and sanitize product_id
+                $qty_to_restock = intval(trim($quantities[$index]));
+
+                // Update the stock of each product
+                $update_stock_stmt = $conn->prepare("UPDATE products SET stock = stock + ? WHERE id = ?");
+                $update_stock_stmt->bind_param("ii", $qty_to_restock, $product_id);
+                $update_stock_stmt->execute();
+            }
+
+            echo "
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Order has been cancelled and stock has been restored!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = 'orders.php';
+                    });
                 });
-            });
-        </script>";
-        exit();
+            </script>";
+            exit();
+        } else {
+            echo "
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Unable to cancel order.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            </script>";
+        }
     } else {
         echo "
         <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
@@ -47,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
             document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     title: 'Error',
-                    text: 'Unable to cancel order.',
+                    text: 'Order cannot be cancelled or it has already been processed.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
@@ -56,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -69,129 +110,122 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <style>
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: #F4D03F;
-            color: #333333;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
 
-        .card-body {
-            padding: 15px;
-        }
+ 
+    th {
+        background-color: #7D3C98 !important;
+        color: #ffffff !important;
+        text-align: center;
+    }
 
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    tbody tr:hover {
+        background-color: #f4f4f4 !important;
+    }
 
-        .card-text {
-            margin-bottom: 5px;
-        }
+    table.dataTable thead th {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
 
-        .card .btn {
-            width: 100%;
-            margin-top: 10px;
-        }
+    table.dataTable {
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        .card .btn-cancel {
-            background-color: #E74C3C;
-            color: #FFFFFF;
-        }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 5px 12px;
+        background-color: #7D3C98;
+        color: #fff !important;
+        border-radius: 5px;
+        margin: 0 2px;
+    }
 
-        .card .btn-cancel:hover {
-            background-color: #C0392B;
-        }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background-color: #F4D03F !important;
+        color: #333333 !important;
+        border-color: #F4D03F !important;
+    }
 
-        .card .btn-view {
-            background-color: #F4D03F;
-            color: #333333;
-        }
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 5px;
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
 
-        .card .btn-view:hover {
-            background-color: #F1C40F;
-        }
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 5px;
+        padding: 5px;
+        border: 1px solid #ddd;
+    }
 
-        .badge {
-            padding: 5px 10px;
-            font-size: 0.9rem;
-        }
+    .badge {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
 
-        .badge-warning {
-            background-color: #F4D03F;
-            color: #333333;
-        }
+    .badge-warning {
+        background-color: #F4D03F;
+        color: #333333;
+    }
 
-        .badge-success {
-            background-color: #28a745;
-        }
+    .badge-success {
+        background-color: #28a745;
+        color: #fff;
+    }
 
-        .badge-secondary {
-            background-color: #6c757d;
-        }
+    .badge-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
 
-        .badge-danger {
-            background-color: #E74C3C;
-        }
+    .badge-danger {
+        background-color: #E74C3C;
+        color: #fff;
+    }
 
-        /* DataTable styling */
-        table.dataTable {
-            width: 100% !important;
-            margin-top: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-        }
+    /* Style for modal details */
+    .modal-header {
+        background-color: #F4D03F;
+        color: #333333;
+    }
 
-        .dataTables_wrapper .dataTables_filter input {
-            border-radius: 5px;
-            padding: 5px;
-            border: 1px solid #ddd;
-        }
+    .modal-body p {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
 
-        .dataTables_wrapper .dataTables_length select {
-            border-radius: 5px;
-            padding: 5px;
-            border: 1px solid #ddd;
-        }
+    /* Styling for order buttons */
+    .btn-view {
+        background-color: #7D3C98;
+        color: #ffffff;
+    }
 
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
+    .btn-view:hover {
+        background-color: #5D2D82;
+    }
 
-        /* Add distinct color to the headers */
-        th {
-            background-color: #f8f9fa;
-            color: #495057;
-            font-weight: bold;
-        }
+    .btn-cancel {
+        background-color: #E74C3C;
+        color: #ffffff;
+    }
 
-        /* Add alternating row colors */
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+    .btn-cancel:hover {
+        background-color: #C0392B;
+    }
 
-        tbody tr:hover {
-            background-color: #f1f1f1;
-        }
+    /* Container outside the table for extra info */
+    .extra-info {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
 
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background-color: #f4d03f;
-            border: 1px solid #f4d03f;
-            color: white;
-        }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #f4d03f;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -202,6 +236,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
             <table id="ordersTable" class="display">
                 <thead>
                     <tr>
+                    <th style="display: none;">Order ID</th>
+
                         <th>Tracking No</th>
                         <th>Items</th>
                         <th>Total</th>
@@ -212,6 +248,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
+                        <td style="display: none;"><?php echo $row['order_id']; ?></td>
+
                             <td><?php echo $row['tracking_code']; ?></td>
                             <td><?php echo $row['product_names']; ?></td>
                             <td>₱<?php echo number_format($row['grand_total'], 2); ?></td>
@@ -298,13 +336,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
+
+
         $(document).ready(function() {
             $('#ordersTable').DataTable({
                 "paging": true,
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "responsive": true
+                "responsive": true,
+                "order": [[0, "desc"]]
             });
         });
     </script>

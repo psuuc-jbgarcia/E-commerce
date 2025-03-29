@@ -65,14 +65,18 @@ while ($row = $cart_result->fetch_assoc()) {
     <?php include 'navigation.php'; ?>
 
     <div class="container mt-5">
-        <div class="text-end mb-3">
-            <button type="button" class="btn m-3" id="checkAllBtn" 
-            style="background-color: #7D3C98; color: #FFFFFF;" 
-            onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#333333';" 
-            onmouseout="this.style.backgroundColor='#7D3C98'; this.style.color='#FFFFFF';">
-                Check All
-            </button>
-        </div>
+    <div class="text-end mb-3 d-flex justify-content-between align-items-center">
+    <div class="text-muted" style="font-size: 1rem !important; color:wheat !important;">
+    Select items to proceed with multiple order actions.    </div>
+    
+    <button type="button" class="btn m-3" id="checkAllBtn" 
+        style="background-color: #7D3C98; color: #FFFFFF;" 
+        onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#333333';" 
+        onmouseout="this.style.backgroundColor='#7D3C98'; this.style.color='#FFFFFF';">
+        Check All
+    </button>
+</div>
+
 
         <?php if (empty($cart_items)) { ?>
             <div class="alert alert-warning" role="alert">
@@ -83,51 +87,56 @@ while ($row = $cart_result->fetch_assoc()) {
     <div class="row g-4">
         <?php foreach ($cart_items as $item) { ?>
             <div class="col-md-4 mb-4">
-                <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; border: 1px solid #f0f0f0 !important; border-radius: 15px !important;">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-center" style="font-size: 1.25rem !important; font-weight: bold !important;"><?php echo htmlspecialchars($item['product_name']); ?></h5>
-                        <input type="hidden" class="product-id" value="<?php echo htmlspecialchars($item['product_id']); ?>">
+    <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; border: 2px solid #FFD700 !important; border-radius: 15px !important; background-color: #7D3C98 !important;">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-center" style="font-size: 1.25rem !important; font-weight: bold !important; color: #FFD700 !important;"><?php echo htmlspecialchars($item['product_name']); ?></h5>
+            <input type="hidden" class="product-id" value="<?php echo htmlspecialchars($item['product_id']); ?>">
 
-                        <img src="https://www.collinsdictionary.com/images/full/apple_158989157.jpg" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important;">
-                        
-                        <p class="card-text mt-3" style="font-size: 1rem !important; color: #555 !important;">
-                            <strong>Quantity:</strong> <?php echo $item['quantity']; ?><br>
-                            <strong>Price:</strong> ₱<?php echo number_format($item['price'], 2); ?><br>
-                            <strong>Total:</strong> ₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
-                        </p>
+            <img src="https://www.collinsdictionary.com/images/full/apple_158989157.jpg" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important; border: 2px solid #FFD700 !important;">
+            
+            <p class="card-text mt-3" style="font-size: 1rem !important; color: #F7DC6F !important;">
+                <strong style="color: #FFD700;">Quantity:</strong> <?php echo $item['quantity']; ?><br>
+                <strong style="color: #FFD700;">Price:</strong> ₱<?php echo number_format($item['price'], 2); ?><br>
+                <strong style="color: #FFD700;">Total:</strong> ₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
+            </p>
 
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div class="form-check" style="position: relative;">
-    <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>" class="form-check-input" style="position: absolute; opacity: 0 !important; z-index: 1 !important;">
-    <label for="item-<?php echo $item['id']; ?>" class="custom-checkbox-label" style="display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid #7D3C98; background-color: #fff; position: relative; cursor: pointer; transition: background-color 0.3s ease-in-out !important; z-index: 0 !important;">
-        <i class="fa fa-check" style="position: absolute; top: 3px; left: 3px; font-size: 16px; color: #7D3C98; opacity: 0; transition: opacity 0.3s ease-in-out !important;"></i>
-    </label>
-</div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <!-- Custom Checkbox -->
+                <div class="form-check" style="position: relative;">
+                    <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>" class="form-check-input" style="position: absolute; opacity: 0 !important; z-index: 1 !important;">
+                    <label for="item-<?php echo $item['id']; ?>" class="custom-checkbox-label" style="display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid #FFD700; background-color: #7D3C98; position: relative; cursor: pointer; transition: background-color 0.3s ease-in-out !important; z-index: 0 !important;">
+                        <i class="fa fa-check" style="position: absolute; top: 3px; left: 3px; font-size: 16px; color: #FFD700; opacity: 0; transition: opacity 0.3s ease-in-out !important;"></i>
+                    </label>
+                </div>
 
-                            <div class="d-flex align-items-center border rounded p-2 bg-light" style="border: 1px solid #ddd !important; background-color: #f8f9fa !important;">
-                                <button type="button" class="btn btn-sm btn-outline-secondary quantity-decrease" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important;">
-                                    <i class="fa fa-minus" style="font-size: 1rem !important;"></i>
-                                </button>
-                                <span class="mx-3 fw-bold quantity-display" style="font-size: 1.1rem !important;"><?php echo $item['quantity']; ?></span>
-                                <button type="button" class="btn btn-sm btn-outline-secondary quantity-increase" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important;">
-                                    <i class="fa fa-plus" style="font-size: 1rem !important;"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Quantity Controls -->
+                <div class="d-flex align-items-center border rounded p-2" style="border: 1px solid #FFD700 !important; background-color: #5B2C6F !important;">
+                    <button type="button" class="btn btn-sm btn-outline-secondary quantity-decrease" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important; border-color: #FFD700 !important; background-color: #5B2C6F !important;">
+                        <i class="fa fa-minus" style="font-size: 1rem !important; color: #FFD700;"></i>
+                    </button>
+                    <span class="mx-3 fw-bold quantity-display" style="font-size: 1.1rem !important; color: #FFD700;"><?php echo $item['quantity']; ?></span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary quantity-increase" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important; border-color: #FFD700 !important; background-color: #5B2C6F !important;">
+                        <i class="fa fa-plus" style="font-size: 1rem !important; color: #FFD700;"></i>
+                    </button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
         <?php } ?>
     </div>
 
-    <div class="text-center mt-4">
-        <button type="button" class="btn btn-lg px-5 py-3" id="checkoutBtn" 
-        style="background-color: #7D3C98 !important; color: #FFFFFF !important; border-radius: 50px !important;" 
-        onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#333333';" 
-        onmouseout="this.style.backgroundColor='#7D3C98'; this.style.color='#FFFFFF';">
-            <i class="fa fa-shopping-cart"></i> Proceed to Checkout
-        </button>
-    </div>
+    <div class="text-center">
+    <button type="button" class="btn btn-sm px-5 py-3" id="checkoutBtn" 
+    style="background-color: #7D3C98 !important; color: #FFFFFF !important; border-radius: 50px !important;
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 1000;" 
+    onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#333333';" 
+    onmouseout="this.style.backgroundColor='#7D3C98'; this.style.color='#FFFFFF';">
+        <i class="fa fa-shopping-cart"></i> Proceed to Checkout
+    </button>
+</div>
+
 </form>
 
 
