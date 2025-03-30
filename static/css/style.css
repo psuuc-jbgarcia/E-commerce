@@ -1,19 +1,15 @@
-/* Add padding to prevent content overlap */
 body {
     padding-top: 70px; /* Adjust if the navbar height changes */
 }
 
-/* Floating shadow for navbar */
 .navbar {
     transition: box-shadow 0.3s ease-in-out;
 }
 
-/* Enhanced shadow when scrolling */
 .navbar.scrolled {
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Card Hover Effect */
 .card:hover {
     transform: translateY(-5px);
     transition: all 0.3s ease-in-out;
@@ -21,12 +17,10 @@ body {
 }
 
 
-/* About Section */
 #about {
     background-color: #f8f9fa;
 }
 
-/* Contact Form */
 #contact-form {
     background-color: #fff;
     padding: 20px;
@@ -35,7 +29,6 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Footer */
 .footer {
     background-color: #333;
     color: white;

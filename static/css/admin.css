@@ -1,117 +1,40 @@
 body {
-    background: linear-gradient(to bottom right, #4B0082, #8E44AD, #F4D03F);
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
     height: 100vh;
+    overflow-x: hidden;
+}
+
+.wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    width: 100%;
+    align-items: stretch;
 }
 
-.container-wrapper {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 450px;
-    padding: 40px;
-    position: relative;
-    overflow: hidden;
-    animation: fadeIn 1s ease-in-out;
+
+
+#content {
+    width: 100%;
+    padding: 20px;
+    transition: all 0.3s;
 }
 
-.floating-bubble {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background: rgba(125, 60, 152, 0.15);
-    border-radius: 50%;
-    animation: float 10s infinite ease-in-out alternate;
-    z-index: -1;
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
 }
 
-.bubble-1 {
-    top: -50px;
-    left: -50px;
-}
-
-.bubble-2 {
-    bottom: -60px;
-    right: -60px;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-30px);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-    width: 120px;
-    display: block;
-    margin: 0 auto 20px;
-}
-
-.title {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #7D3C98;
-    margin-bottom: 20px;
-    letter-spacing: 1.2px;
-}
-
-.btn-primary {
-    background: linear-gradient(to right, #7D3C98, #F4D03F);
-    border: none;
-    transition: all 0.3s;
-}
-
-.btn-primary:hover {
-    background: #F4D03F;
-    color: #4B0082;
-}
-
-.form-control:focus {
-    border-color: #7D3C98;
-    box-shadow: 0 0 12px rgba(125, 60, 152, 0.5);
-}
-
-.input-group-text {
-    cursor: pointer;
-    background-color: #7D3C98;
-    color: #FFFFFF;
-    transition: all 0.3s;
-}
-
-.input-group-text:hover {
-    background-color: #F4D03F;
-    color: #4B0082;
-}
-
-a {
-    color: #7D3C98;
-}
-
-a:hover {
-    color: #F4D03F;
-}
-
-.text-danger {
-    font-size: 0.875rem;
+    width: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
 }
