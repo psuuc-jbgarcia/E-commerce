@@ -35,7 +35,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
 
         <div class="d-flex align-items-center">
-            <!-- Notification Button with Modal Trigger -->
             <button class="btn btn-outline-light position-relative me-3" style="border-color: #F4D03F; color: #F4D03F;" data-bs-toggle="modal" data-bs-target="#notifModal">
                 <i class="fas fa-bell"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -43,7 +42,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </span>
             </button>
 
-            <!-- Profile Dropdown -->
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle" style="border-color: #F4D03F; color: #F4D03F;" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user"></i> Profile
@@ -63,12 +61,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 </nav>
 
-<!-- Add margin-top to prevent content overlap -->
 <div style="margin-top: 80px;">
-    <!-- Page content goes here -->
 </div>
 
-<!-- Notification Modal -->
 <div class="modal fade" id="notifModal" tabindex="-1" aria-labelledby="notifModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -88,7 +83,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 </div>
 
-<!-- Custom Styles for Active Menu -->
 <style>
     .nav-link.active {
         background-color: #F4D03F !important;
@@ -98,5 +92,4 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
 </style>
 
-<!-- Bootstrap CSS & JS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">

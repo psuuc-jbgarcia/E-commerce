@@ -13,7 +13,6 @@ $item_id = intval($data['item_id']);
 $action = $data['action'];
 $quantity = intval($data['quantity']);
 
-// Check if item exists in the cart
 $stmt = $conn->prepare("SELECT quantity FROM cart WHERE id = ?");
 $stmt->bind_param("i", $item_id);
 $stmt->execute();
@@ -23,14 +22,12 @@ if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();
     $currentQuantity = $row['quantity'];
 
-    // Determine the new quantity
     if ($action === 'increase') {
         $currentQuantity++;
     } elseif ($action === 'decrease' && $currentQuantity > 0) {
         $currentQuantity--;
     }
 
-    // If quantity is 0, delete the item from the cart
     if ($currentQuantity === 0) {
         $delete_stmt = $conn->prepare("DELETE FROM cart WHERE id = ?");
         $delete_stmt->bind_param("i", $item_id);
@@ -39,7 +36,6 @@ if ($result->num_rows === 1) {
             exit();
         }
     } else {
-        // Update quantity in the cart
         $update_stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE id = ?");
         $update_stmt->bind_param("ii", $currentQuantity, $item_id);
         if ($update_stmt->execute()) {
@@ -49,6 +45,5 @@ if ($result->num_rows === 1) {
     }
 }
 
-// If something goes wrong
 echo json_encode(['success' => false, 'error' => 'Failed to update quantity']);
 ?>

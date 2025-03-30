@@ -12,7 +12,7 @@ if (!isset($_SESSION['admin_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users - Golden Mart Inventory</title>
+    <title>Manage Users - Inventory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/admin.css">
@@ -59,7 +59,7 @@ if (!isset($_SESSION['admin_id'])) {
                 <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1>This page is static data only; it is under development.</h1>
+                <h3>This page is static data only; For UI</h3>
                 <div class="ms-auto">
                     <span class="navbar-text me-3">
                         <i class="fas fa-user-shield me-1"></i> Admin: <?php echo $_SESSION['username']; ?>

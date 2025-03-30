@@ -24,7 +24,6 @@ $result = $stmt->get_result();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     $order_id = intval($_POST['order_id']);
 
-    // Fetch product_ids and quantities for the order being cancelled
     $order_query = $conn->prepare("SELECT product_ids, quantities FROM orders WHERE order_id = ? AND username = ? AND order_status = 'Pending'");
     $order_query->bind_param("is", $order_id, $email);
     $order_query->execute();
@@ -35,17 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
         $product_ids = explode(",", $order_data['product_ids']);
         $quantities = explode(",", $order_data['quantities']);
 
-        // Cancel the order and update status
         $cancel_stmt = $conn->prepare("UPDATE orders SET order_status = 'Cancelled' WHERE order_id = ? AND username = ? AND order_status = 'Pending'");
         $cancel_stmt->bind_param("is", $order_id, $email);
 
         if ($cancel_stmt->execute()) {
-            // Restock the product quantities
             foreach ($product_ids as $index => $product_id) {
-                $product_id = intval(trim($product_id)); // Trim and sanitize product_id
+                $product_id = intval(trim($product_id)); 
                 $qty_to_restock = intval(trim($quantities[$index]));
 
-                // Update the stock of each product
                 $update_stock_stmt = $conn->prepare("UPDATE products SET stock = stock + ? WHERE id = ?");
                 $update_stock_stmt->bind_param("ii", $qty_to_restock, $product_id);
                 $update_stock_stmt->execute();
@@ -351,8 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     </script>
     <script>
     function showModal(event) {
-        event.preventDefault(); // Prevent the form from submitting
-        // You can add additional code if needed to handle specific logic before showing the modal
+        event.preventDefault(); 
     }
 </script>
 

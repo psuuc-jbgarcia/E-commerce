@@ -1,12 +1,9 @@
 <?php
-// Include connection file
 require '../connection.php';
 
-// Get form data
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-// Check if email exists
 $sql_check = "SELECT * FROM users WHERE email = ?";
 $stmt_check = $conn->prepare($sql_check);
 $stmt_check->bind_param("s", $email);
@@ -16,18 +13,14 @@ $result_check = $stmt_check->get_result();
 if ($result_check->num_rows > 0) {
     $user = $result_check->fetch_assoc();
     
-    // Verify password
     if (password_verify($password, $user['password'])) {
-        // Start session
         session_start();
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['number'] = $user['phone'];
         $_SESSION['address'] = $user['address'];
-         // Add email to session
 
-        // Redirect with JavaScript after login
         echo "
         <html>
         <head>
@@ -51,7 +44,6 @@ if ($result_check->num_rows > 0) {
         </html>";
         exit();
     } else {
-        // Incorrect password
         echo "
         <html>
         <head>
@@ -74,7 +66,6 @@ if ($result_check->num_rows > 0) {
         exit();
     }
 } else {
-    // Email not found
     echo "
     <html>
     <head>

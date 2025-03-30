@@ -116,16 +116,15 @@ if (!isset($_SESSION['admin_id'])) {
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <?php include 'admin_nav.php'; ?>
 
-        <!-- Page Content -->
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm secondary-nav">
                 <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1>This page is static data only; it is under development.</h1>
+                      <h3>This page is static data only; For UI</h3>
+
                 <div class="ms-auto">
                     <span class="navbar-text me-3">
                         <i class="fas fa-user-shield me-1"></i> Admin: <?php echo $_SESSION['username']; ?>

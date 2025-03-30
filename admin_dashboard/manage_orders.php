@@ -67,16 +67,16 @@ if (!isset($_SESSION['admin_id'])) {
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <?php include 'admin_nav.php'; ?>
 
-        <!-- Page Content -->
-        <div id="content">
-            <!-- Secondary Nav -->
+
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm secondary-nav">
                 <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary">
                     <i class="fas fa-bars"></i>
                 </button>
+                <div id="content">   
+                                 <h3>This page is static data only; For UI</h3>
+
                 <div class="ms-auto">
                     <span class="navbar-text me-3">
                         <i class="fas fa-user-shield me-1"></i> Admin: <?php echo $_SESSION['username']; ?>
@@ -101,7 +101,6 @@ if (!isset($_SESSION['admin_id'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Static Data for Orders -->
                             <tr>
                                 <td>#001</td>
                                 <td>Juan Dela Cruz</td>

@@ -50,6 +50,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <li><a href="manage_products.php" class="<?= $current_page == 'manage_products.php' ? 'active' : '' ?>"><i class="fas fa-box me-2"></i> Manage Products</a></li>
         <li><a href="manage_users.php" class="<?= $current_page == 'manage_users.php' ? 'active' : '' ?>"><i class="fas fa-users me-2"></i> Manage Users</a></li>
         <li><a href="manage_orders.php" class="<?= $current_page == 'manage_orders.php' ? 'active' : '' ?>"><i class="fas fa-shopping-cart me-2"></i> Manage Orders</a></li>
+        <li><a href="sale_history.php" class="<?= $current_page == 'sale_history.php' ? 'active' : '' ?>"><i class="fas fa-history me-2"></i> Sale History</a></li> <!-- Added Sale History -->
         <li><a href="../authentication/admin/admin_logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
     </ul>
 </nav>

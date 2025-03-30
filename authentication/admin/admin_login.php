@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result->num_rows === 1) {
         $admin = $result->fetch_assoc();
-        if ($password === $admin['password']) { // Plain text comparison
+        if ($password === $admin['password']) { 
             $_SESSION['admin_id'] = $admin['id'];
             $_SESSION['username'] = $admin['username'];
             echo '<script>

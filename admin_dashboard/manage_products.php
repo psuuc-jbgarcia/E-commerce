@@ -7,14 +7,12 @@ if (!isset($_SESSION['admin_id'])) {
 
 require '../connection.php';
 
-// Fetch existing categories
 $category_result = $conn->query("SELECT DISTINCT category FROM products ORDER BY category ASC");
 $categories = [];
 while ($row = $category_result->fetch_assoc()) {
     $categories[] = $row['category'];
 }
 
-// Check for success or error message
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
 ?>
@@ -25,7 +23,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Products - Golden Mart Inventory</title>
+    <title>Manage Products - Inventory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -122,7 +120,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                     <table class="table table-striped table-bordered" id="productTable" width="100%">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Price</th>
@@ -139,7 +137,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                             while ($row = $result->fetch_assoc()) :
                             ?>
                                 <tr>
-                                    <td><?= $row['id'] ?></td>
+                                    <!-- <td><?= $row['id'] ?></td> -->
                                     <td><?= $row['name'] ?></td>
                                     <td><?= $row['description'] ?></td>
                                     <td>₱<?= number_format($row['price'], 2) ?></td>
@@ -150,9 +148,10 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                                     <td><?= $row['category'] ?></td>
                                     <td><?= date('Y-m-d H:i:s', strtotime($row['created_at'])) ?></td>
                                     <td>
-                                        <a href="update_product.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm-custom">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                    <a href="javascript:void(0);" class="btn btn-warning btn-sm-custom edit-btn" data-id="<?= $row['id'] ?>" data-name="<?= $row['name'] ?>" data-description="<?= $row['description'] ?>" data-price="<?= $row['price'] ?>" data-stock="<?= $row['stock'] ?>" data-category="<?= $row['category'] ?>" data-image="<?= $row['image_name'] ?>">
+    <i class="fas fa-edit"></i>
+</a>
+
                                         <a href="delete_product.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm-custom delete-btn">
                                             <i class="fas fa-trash"></i>
                                         </a>
@@ -207,7 +206,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                                     <option value="new">Add New Category</option>
                                 </select>
                             </div>
-                            <!-- New Category Input -->
                             <div class="mb-3" id="new_category">
                                 <label for="new_category_input" class="form-label">New Category Name</label>
                                 <input type="text" name="new_category" id="new_category_input" class="form-control">
@@ -227,6 +225,65 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
             </form>
         </div>
     </div>
+    <!-- edit -->
+     <!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form id="editProductForm" action="update_product.php" method="POST" enctype="multipart/form-data" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel"><i class="fas fa-box me-1"></i> Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="edit_name" class="form-label">Product Name</label>
+                            <input type="text" name="name" id="edit_name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_description" class="form-label">Description</label>
+                            <textarea name="description" id="edit_description" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_price" class="form-label">Price</label>
+                            <input type="number" step="0.01" name="price" id="edit_price" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="edit_stock" class="form-label">Stock</label>
+                            <input type="number" name="stock" id="edit_stock" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_category" class="form-label">Category</label>
+                            <select name="category" id="edit_category" class="form-select">
+                                <option value="">Select Category</option>
+                                <?php foreach ($categories as $category) : ?>
+                                    <option value="<?= $category ?>"><?= $category ?></option>
+                                <?php endforeach; ?>
+                                <option value="new">Add New Category</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="edit_new_category">
+                            <label for="edit_new_category_input" class="form-label">New Category Name</label>
+                            <input type="text" name="new_category" id="edit_new_category_input" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_product_image" class="form-label">Product Image</label>
+                            <input type="file" name="product_image" id="edit_product_image" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="product_id" id="edit_product_id">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -238,6 +295,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <script>
+
 $(document).ready(function () {
     $('#productTable').DataTable({
         dom: '<"top"f>rt<"bottom"Bp><"clear">',
@@ -271,38 +329,35 @@ $(document).ready(function () {
         pageLength: 10
     });
 
-    // Show/Hide New Category Input
     $('#category').on('change', function () {
         if ($(this).val() === 'new') {
             $('#new_category').show();
         } else {
             $('#new_category').hide();
-            $('#new_category_input').val(''); // Reset new category if hidden
+            $('#new_category_input').val(''); 
         }
     });
+//////////////////////////manage prod function
+//delete
+    $(document).on('click', '.delete-btn', function (e) {
+        e.preventDefault();
+        const href = $(this).attr('href');
 
-    // Confirm Delete Button with SweetAlert
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'This action cannot be undone!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = href;
-                }
-            });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = href;
+            }
         });
     });
-
+//add
     $('#saveProduct').click(function () {
         let isValid = true;
         let errorMessage = "";
@@ -315,7 +370,6 @@ $(document).ready(function () {
         const newCategory = $('#new_category_input').is(':visible') ? $('#new_category_input').val().trim() : '';
         const productImage = $('#product_image').val().trim();
 
-        // ✅ Debugging: Log values to the console
         console.log("Name:", name);
         console.log("Description:", description);
         console.log("Price:", price);
@@ -324,23 +378,19 @@ $(document).ready(function () {
         console.log("New Category:", newCategory);
         console.log("Product Image:", productImage);
 
-        // ✅ Validation for required fields
         if (name === '' || description === '' || price === '' || stock === '' || productImage === '') {
             errorMessage = "Please fill in all required fields.";
             isValid = false;
         } 
-        // ✅ Check if new category is empty when selected
         else if (category === 'new' && newCategory === '') {
             errorMessage = "Please enter a new category name.";
             isValid = false;
         } 
-        // ✅ Check if valid category is selected
         else if (category === '' || (category !== 'new' && $('#category option:selected').val() === '')) {
             errorMessage = "Please select a valid category.";
             isValid = false;
         }
 
-        // ✅ Display error or submit the form
         if (!isValid) {
             Swal.fire({
                 icon: 'error',
@@ -352,9 +402,46 @@ $(document).ready(function () {
             $('#addProductForm').submit();
         }
     });
-
 });
-       
+// edit
+$(document).ready(function () {
+            $('.edit-btn').on('click', function () {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const description = $(this).data('description');
+                const price = $(this).data('price');
+                const stock = $(this).data('stock');
+                const category = $(this).data('category');
+                const image = $(this).data('image');
+
+                $('#edit_product_id').val(id);
+                $('#edit_name').val(name);
+                $('#edit_description').val(description);
+                $('#edit_price').val(price);
+                $('#edit_stock').val(stock);
+                $('#edit_category').val(category);  // This will update the category select input
+
+                // Check if the category is 'new' and display the new category input
+                if (category === 'new') {
+                    $('#edit_new_category').show();
+                    $('#edit_new_category_input').val(''); // Clear the input for new category
+                } else {
+                    $('#edit_new_category').hide();
+                }
+
+                $('#editProductModal').modal('show');
+            });
+
+            $('#edit_category').on('change', function () {
+                if ($(this).val() === 'new') {
+                    $('#edit_new_category').show();
+                } else {
+                    $('#edit_new_category').hide();
+                    $('#edit_new_category_input').val('');  // Reset new category if hidden
+                }
+            });
+        });
+ 
     </script>
 
 </body>

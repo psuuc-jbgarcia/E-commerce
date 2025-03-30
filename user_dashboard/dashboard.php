@@ -6,34 +6,28 @@ if (!isset($_SESSION['user_id'])) {
 }
 require '../connection.php';
 
-// Get selected category and search term
 $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Fetch unique categories for filter
 $category_query = "SELECT DISTINCT category FROM products";
 $category_result = $conn->query($category_query);
 
-// Prepare query for search and category filter
 $sql = "SELECT * FROM products WHERE 1";
 $params = [];
 $types = "";
 
-// Apply category filter
 if (!empty($category_filter)) {
     $sql .= " AND category = ?";
     $params[] = $category_filter;
     $types .= "s";
 }
 
-// Apply search query
 if (!empty($search_query)) {
     $sql .= " AND name LIKE ?";
     $params[] = "%" . $search_query . "%";
     $types .= "s";
 }
 
-// Prepare and execute query
 $stmt = $conn->prepare($sql);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);

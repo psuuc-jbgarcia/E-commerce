@@ -92,7 +92,7 @@ while ($row = $cart_result->fetch_assoc()) {
             <h5 class="card-title text-center" style="font-size: 1.25rem !important; font-weight: bold !important; color: #FFD700 !important;"><?php echo htmlspecialchars($item['product_name']); ?></h5>
             <input type="hidden" class="product-id" value="<?php echo htmlspecialchars($item['product_id']); ?>">
 
-            <img src="https://www.collinsdictionary.com/images/full/apple_158989157.jpg" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important; border: 2px solid #FFD700 !important;">
+            <img src="../uploads/<?= $item['image_name'] ?>" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important; border: 2px solid #FFD700 !important;">
             
             <p class="card-text mt-3" style="font-size: 1rem !important; color: #F7DC6F !important;">
                 <strong style="color: #FFD700;">Quantity:</strong> <?php echo $item['quantity']; ?><br>
@@ -154,17 +154,14 @@ while ($row = $cart_result->fetch_assoc()) {
                 <div class="modal-body">
                     <h5 class="text-center mb-4">Thank You for Shopping!</h5>
 
-                    <!-- Selected Items List -->
                     <h6 class="fw-bold">📦 Your Selected Items</h6>
                     <ul id="selected-items-list" class="list-group mb-3"></ul>
 
-                    <!-- Shipping Address -->
                     <div class="mb-3">
                         <h6 class="fw-bold">📍 Shipping Address</h6>
                         <input type="text" class="form-control" name="address" placeholder="Enter your address" value="<?php echo htmlspecialchars($user_address); ?>" required>
                     </div>
 
-                    <!-- Payment Method -->
                     <div class="mb-3">
                         <h6 class="fw-bold">💳 Payment Method</h6>
                         <select class="form-select" name="payment_method" required>
@@ -197,7 +194,6 @@ while ($row = $cart_result->fetch_assoc()) {
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
@@ -237,7 +233,6 @@ while ($row = $cart_result->fetch_assoc()) {
             });
         });
 
-        // Add event listener to the "Proceed to Checkout" button
         checkoutBtn.addEventListener('click', (event) => {
             let anySelected = false;
             checkboxes.forEach((checkbox) => {
@@ -305,7 +300,6 @@ while ($row = $cart_result->fetch_assoc()) {
             totalPriceElement.textContent = totalPrice.toFixed(2);
         }
 
-        // Function to generate a random tracking code
         function generateTrackingCode() {
             const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let trackingCode = 'TRK';
@@ -315,7 +309,6 @@ while ($row = $cart_result->fetch_assoc()) {
             return trackingCode;
         }
 
-        // Function to update hidden inputs
         function updateHiddenInputs() {
             let productIds = [], itemNames = [], quantities = [];
             const trackingCode = generateTrackingCode();
@@ -350,7 +343,6 @@ while ($row = $cart_result->fetch_assoc()) {
                 const quantityDisplay = this.closest(".d-flex").querySelector(".quantity-display");
                 let currentQuantity = parseInt(quantityDisplay.textContent);
 
-                // Determine if increasing or decreasing
                 if (this.classList.contains("quantity-increase")) {
                     currentQuantity++;
                 } else if (this.classList.contains("quantity-decrease") && currentQuantity > 0) {
@@ -372,10 +364,8 @@ while ($row = $cart_result->fetch_assoc()) {
                 .then(data => {
                     if (data.success) {
                         if (currentQuantity === 0) {
-                            // Remove the item from the DOM when quantity reaches zero
                             this.closest('.col-md-4').remove();
                         } else {
-                            // Update the displayed quantity
                             quantityDisplay.textContent = currentQuantity;
                         }
                     } else {

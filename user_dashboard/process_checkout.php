@@ -1,8 +1,7 @@
 <?php
 session_start();
-require '../connection.php';  // Include DB connection
+require '../connection.php';  
 
-// SweetAlert function
 function showAlert($title, $message, $icon)
 {
     echo "
@@ -22,7 +21,6 @@ function showAlert($title, $message, $icon)
     exit();
 }
 
-// Check if request is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (
         isset($_POST['product_ids']) &&
@@ -33,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         isset($_POST['grand_total']) &&
         isset($_POST['tracking_code'])
     ) {
-        // Get user details from session
         if (!isset($_SESSION['email']) || !isset($_SESSION['number']) || !isset($_SESSION['address'])) {
             showAlert('Error', 'User session data is missing.', 'error');
         }
@@ -42,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $contact_number = $_SESSION['number'];
         $shipping_address = $_SESSION['address'];
 
-        // Get order details from form
         $tracking_code = $_POST['tracking_code'];
         $product_ids = $_POST['product_ids'];
         $product_names = $_POST['product_names'];
@@ -53,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $order_status = 'Pending';
         $order_date = date('Y-m-d');
 
-        // Combine arrays for insertion
         $product_ids_str = implode(", ", $product_ids); // Comma separated product IDs
         $product_names_str = implode(", ", $product_names);
         $quantities_str = implode(", ", $quantities);
@@ -61,11 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        
 
 
-// Start a transaction
 $conn->begin_transaction();
 
 try {
-    // Insert data into the orders table
     $stmt = $conn->prepare("
         INSERT INTO orders (
             tracking_code, username, shipping_address, contact_number, product_ids,
@@ -85,21 +78,14 @@ try {
         throw new Exception("Error inserting order: " . $stmt->error);
     }
 
-    // Get the last inserted order ID
     $order_id = $stmt->insert_id;
 
-    // Debug: Print product IDs to check if they are being passed correctly
-    // echo "Product IDs: " . implode(", ", $product_ids) . "<br>";
+  
 
-    // Loop through each product in the order
     for ($i = 0; $i < count($product_ids); $i++) {
         $product_id = intval($product_ids[$i]);
         $quantity = intval($quantities[$i]);
 
-        // Debug: Print product ID and quantity for each loop iteration
-        // echo "Processing Product ID: $product_id, Quantity: $quantity<br>";
-
-        // Check stock availability before updating
         $check_stock_stmt = $conn->prepare("SELECT stock, name FROM products WHERE id = ?");
         $check_stock_stmt->bind_param("i", $product_id);
         $check_stock_stmt->execute();
@@ -107,13 +93,12 @@ try {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $product_name = $row['name'];  // Get product name
+            $product_name = $row['name'];  
 
             if ($row['stock'] < $quantity) {
                 throw new Exception("Insufficient stock for product: $product_name");
             }
 
-            // Update stock in the products table
             $update_stock_stmt = $conn->prepare("
                 UPDATE products 
                 SET stock = stock - ? 
@@ -125,7 +110,6 @@ try {
                 throw new Exception("Error updating stock for product: " . $product_name);
             }
 
-            // Remove item from cart after successful stock update
             $delete_cart_stmt = $conn->prepare("DELETE FROM cart WHERE product_id = ?");
             $delete_cart_stmt->bind_param("i", $product_id);
             if (!$delete_cart_stmt->execute()) {
@@ -136,17 +120,13 @@ try {
         }
     }
 
-    // Commit the transaction
     $conn->commit();
 
-    // Order success
     showAlert('Success', 'Your order has been placed successfully!', 'success');
 
 } catch (Exception $e) {
-    // Rollback the transaction if an error occurs
     $conn->rollback();
 
-    // Display error message
     showAlert('Error', $e->getMessage(), 'error');
 }
 

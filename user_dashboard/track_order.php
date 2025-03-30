@@ -2,7 +2,6 @@
 session_start();
 require '../connection.php';
 
-// Fetch all orders and group them by status
 $query = "SELECT order_id, tracking_code, username, shipping_address, contact_number, product_ids, product_names, quantities, payment_method, shipping_fee_total, grand_total, order_status, order_date FROM orders ORDER BY order_status";
 $result = $conn->query($query);
 $orders = [];
@@ -77,7 +76,6 @@ while ($row = $result->fetch_assoc()) {
         opacity: 0.5;
     }
 
-    /* Glow effect for active icon */
     .active-icon {
         color: #F4D03F;
         opacity: 1;
@@ -148,7 +146,6 @@ while ($row = $result->fetch_assoc()) {
     <?php include 'navigation.php'; ?>
 
     <div class="container parent">
-<!-- Tabs Section -->
 <div class="div1">
     <ul class="nav nav-tabs" id="orderStatusTab" role="tablist">
         <li class="nav-item">
