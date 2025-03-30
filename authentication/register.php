@@ -10,29 +10,42 @@
     <style>
         body {
             background-color: rgb(66, 36, 78);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        .form-container {
+        .container-wrapper {
             background-color: #FFFFFF;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
             width: 90%;
-            max-width: 800px;
+            max-width: 900px;
         }
 
-        .form-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .left-side {
+            background-color: #7D3C98;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+
+        .right-side {
+            padding: 40px;
         }
 
         .logo {
-            width: 120px;
+            width: 100px;
             display: block;
             margin: 0 auto 10px;
         }
@@ -67,9 +80,26 @@
             color: #FFFFFF;
         }
 
+        a {
+            color: #7D3C98;
+        }
+
+        a:hover {
+            color: #F4D03F;
+        }
+
         @media (max-width: 768px) {
-            .form-content {
-                grid-template-columns: 1fr;
+            .left-side {
+                border-radius: 12px 12px 0 0;
+                padding: 20px 0;
+            }
+
+            .container-wrapper {
+                flex-direction: column;
+            }
+
+            .right-side {
+                padding: 30px 20px;
             }
         }
 
@@ -80,51 +110,63 @@
 </head>
 
 <body>
-    <div class="form-container">
-        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="Shop Logo" class="logo">
-        <div class="system-title">Golden Mart Inventory</div>
+    <div class="container-wrapper d-flex">
+        <div class="left-side col-md-6 d-none d-md-flex">
+            <img src="../static/images/hero.png" alt="" class="hero-image">
+        </div>
 
-        <form id="registerForm" action="register_user.php" method="POST" onsubmit="return validateForm()">
-            <div class="form-content">
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Full Name">
-                    <small class="text-danger" id="nameError"></small>
-                </div>
-                <div class="mb-3">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-                    <small class="text-danger" id="emailError"></small>
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
-                    <small class="text-danger" id="phoneError"></small>
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" id="address" name="address" rows="2" placeholder="Address"></textarea>
-                    <small class="text-danger" id="addressError"></small>
-                </div>
-                <div class="mb-3">
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                        <span class="input-group-text" onclick="togglePassword('password', 'eyeIcon')">
-                            <i id="eyeIcon" class="fas fa-eye"></i>
-                        </span>
+        <div class="right-side col-md-6">
+        <div class="text-center mb-3">
+            
+    <img src="../static/images/logo.png" alt="Shop Logo" class="logo">
+    <div class="system-title">Small shop</div>
+
+    <h3 class="fw-bold" style="color: #7D3C98;"><i class="fas fa-user-plus me-1"></i> Register</h3>
+</div>
+
+            <form id="registerForm" action="register_user.php" method="POST" onsubmit="return validateForm()">
+                <div class="row g-3">
+                    <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Full Name">
+                        <small class="text-danger" id="nameError"></small>
                     </div>
-                    <small class="text-danger" id="passwordError"></small>
-                </div>
-                <div class="mb-3">
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                            placeholder="Confirm Password">
-                        <span class="input-group-text" onclick="togglePassword('confirm_password', 'eyeIconConfirm')">
-                            <i id="eyeIconConfirm" class="fas fa-eye"></i>
-                        </span>
+                    <div class="col-md-6 mb-3">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                        <small class="text-danger" id="emailError"></small>
                     </div>
-                    <small class="text-danger" id="confirmPasswordError"></small>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number">
+                        <small class="text-danger" id="phoneError"></small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Address"></textarea>
+                        <small class="text-danger" id="addressError"></small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password">
+                            <span class="input-group-text" onclick="togglePassword('password', 'eyeIcon')">
+                                <i id="eyeIcon" class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <small class="text-danger" id="passwordError"></small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                placeholder="Confirm Password">
+                            <span class="input-group-text" onclick="togglePassword('confirm_password', 'eyeIconConfirm')">
+                                <i id="eyeIconConfirm" class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <small class="text-danger" id="confirmPasswordError"></small>
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 mt-3"><i class="fas fa-user-plus me-1"></i> Register</button>
-            <p class="text-center mt-3">Already have an account? <a href="login.php" style="color: #7D3C98;">Login</a></p>
-        </form>
+                <button type="submit" class="btn btn-primary w-100 mt-3"><i class="fas fa-user-plus me-1"></i> Register</button>
+                <p class="text-center mt-3">Already have an account? <a href="login.php">Login</a></p>
+            </form>
+        </div>
     </div>
 
     <script>

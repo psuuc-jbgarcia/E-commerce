@@ -10,27 +10,41 @@
     <style>
         body {
             background-color: rgb(66, 36, 78);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        .form-container {
+        .container-wrapper {
             background-color: #FFFFFF;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 100%;
-            max-width: 500px;
-            position: relative;
+            width: 90%;
+            max-width: 900px;
         }
 
-        .logo {
-            font-size: 60px;
-            color: #7D3C98;
-            margin-bottom: 10px;
+        .left-side {
+            background-color: #7D3C98;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
+
+        .hero-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+
+        .right-side {
+            padding: 40px;
+        }
+
+    
 
         .shop-title {
             font-size: 1.5rem;
@@ -48,15 +62,6 @@
         .btn-primary:hover {
             background-color: #F4D03F;
             color: #333333;
-        }
-
-        .btn-warning {
-            background-color: #F4D03F;
-            color: #333333;
-        }
-
-        .btn-warning:hover {
-            background-color: #E0A800;
         }
 
         .input-group-text {
@@ -81,31 +86,56 @@
         .text-danger {
             font-size: 0.875rem;
         }
+
+        @media (max-width: 768px) {
+            .left-side {
+                border-radius: 12px 12px 0 0;
+                padding: 20px 0;
+            }
+
+            .container-wrapper {
+                flex-direction: column;
+            }
+
+            .right-side {
+                padding: 30px 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="form-container text-center">
-        <i class="fas fa-store logo"></i>
-        <p class="shop-title">Small Shop Inventory</p>
-        <h3 class="text-center fw-bold mb-4" style="color: #7D3C98;"><i class="fas fa-sign-in-alt me-1"></i> Login</h3>
-        <form id="loginForm" action="logingin.php" method="POST" onsubmit="return validateForm(event)">
-            <div class="mb-3 text-start">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-                <small class="text-danger" id="emailError"></small>
+    <div class="container-wrapper d-flex">
+        <!-- Left Side - Image -->
+        <div class="left-side col-md-6 d-none d-md-flex">
+            <img src="../static/images/hero.png" alt="Small Store" class="hero-image">
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="right-side col-md-6">
+            <div class="text-center">
+            <img src="" alt="Shop Logo" class="logo">
+            <p class="shop-title">Small Shop</p>
+                <h3 class="fw-bold mb-4" style="color: #7D3C98;"><i class="fas fa-sign-in-alt me-1"></i> Login</h3>
             </div>
-            <div class="mb-3 text-start">
-                <div class="input-group">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                    <span class="input-group-text" onclick="togglePassword('password', 'eyeIcon')">
-                        <i id="eyeIcon" class="fas fa-eye"></i>
-                    </span>
+            <form id="loginForm" action="logingin.php" method="POST" onsubmit="return validateForm(event)">
+                <div class="mb-3 text-start">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                    <small class="text-danger" id="emailError"></small>
                 </div>
-                <small class="text-danger" id="passwordError"></small>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 mb-3"><i class="fas fa-sign-in-alt me-1"></i> Login</button>
-        </form>
-        <p class="text-center">Don't have an account? <a href="register.php">Register</a></p>
+                <div class="mb-3 text-start">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        <span class="input-group-text" onclick="togglePassword('password', 'eyeIcon')">
+                            <i id="eyeIcon" class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    <small class="text-danger" id="passwordError"></small>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3"><i class="fas fa-sign-in-alt me-1"></i> Login</button>
+            </form>
+            <p class="text-center">Don't have an account? <a href="register.php">Register</a></p>
+        </div>
     </div>
 
     <script>

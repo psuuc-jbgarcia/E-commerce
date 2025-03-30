@@ -173,13 +173,14 @@
         </div>
     </nav>
 
-    <section id="home" class="hero text-center">
-        <div class="container">
-            <h1 class="fw-bold"><i class="fas fa-shopping-bag me-2"></i> Manage Your Grocery Store Online</h1>
-            <p class="lead">Track inventory, record sales, and ensure smooth operations with ease.</p>
-            <a href="./authentication/login.php" class="btn btn-primary btn-lg mt-3"><i class="fas fa-eye me-1"></i> Explore Products</a>
-        </div>
-    </section>
+    <section id="home" class="hero text-center" style="background: url('./static/images/hero.png') no-repeat center center; background-size: cover;">
+    <div class="container">
+        <h1 class="fw-bold"><i class="fas fa-shopping-bag me-2"></i> Manage Your Grocery Store Online</h1>
+        <p class="lead">Track inventory, record sales, and ensure smooth operations with ease.</p>
+        <a href="./authentication/login.php" class="btn btn-primary btn-lg mt-3"><i class="fas fa-eye me-1"></i> Explore Products</a>
+    </div>
+</section>
+
 
     <section id="products" class="py-5 text-center">
         <div class="container">
