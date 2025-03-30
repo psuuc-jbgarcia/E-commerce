@@ -35,13 +35,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
 
         <div class="d-flex align-items-center">
-            <button class="btn btn-outline-light position-relative me-3" style="border-color: #F4D03F; color: #F4D03F;">
+            <!-- Notification Button with Modal Trigger -->
+            <button class="btn btn-outline-light position-relative me-3" style="border-color: #F4D03F; color: #F4D03F;" data-bs-toggle="modal" data-bs-target="#notifModal">
                 <i class="fas fa-bell"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     3
                 </span>
             </button>
 
+            <!-- Profile Dropdown -->
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle" style="border-color: #F4D03F; color: #F4D03F;" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user"></i> Profile
@@ -61,12 +63,32 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 </nav>
 
-<!-- Add a margin-top to the content below the navbar to prevent it from being hidden -->
+<!-- Add margin-top to prevent content overlap -->
 <div style="margin-top: 80px;">
-    <!-- Your page content goes here -->
+    <!-- Page content goes here -->
 </div>
 
-<!-- Custom Styles to Highlight Active Menu -->
+<!-- Notification Modal -->
+<div class="modal fade" id="notifModal" tabindex="-1" aria-labelledby="notifModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #7D3C98; color: #fff;">
+                <h5 class="modal-title" id="notifModalLabel"><i class="fas fa-bell me-2"></i> Notifications</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p><i class="fas fa-tools fa-3x text-warning mb-3"></i></p>
+                <h5>This feature is under development.</h5>
+                <p class="text-muted">You will be able to receive notifications regarding order status soon.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles for Active Menu -->
 <style>
     .nav-link.active {
         background-color: #F4D03F !important;
@@ -76,4 +98,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
 </style>
 
+<!-- Bootstrap CSS & JS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">

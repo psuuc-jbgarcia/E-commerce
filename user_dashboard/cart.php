@@ -101,7 +101,6 @@ while ($row = $cart_result->fetch_assoc()) {
             </p>
 
             <div class="d-flex justify-content-between align-items-center mt-3">
-                <!-- Custom Checkbox -->
                 <div class="form-check" style="position: relative;">
                     <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>" class="form-check-input" style="position: absolute; opacity: 0 !important; z-index: 1 !important;">
                     <label for="item-<?php echo $item['id']; ?>" class="custom-checkbox-label" style="display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid #FFD700; background-color: #7D3C98; position: relative; cursor: pointer; transition: background-color 0.3s ease-in-out !important; z-index: 0 !important;">
@@ -109,7 +108,6 @@ while ($row = $cart_result->fetch_assoc()) {
                     </label>
                 </div>
 
-                <!-- Quantity Controls -->
                 <div class="d-flex align-items-center border rounded p-2" style="border: 1px solid #FFD700 !important; background-color: #5B2C6F !important;">
                     <button type="button" class="btn btn-sm btn-outline-secondary quantity-decrease" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important; border-color: #FFD700 !important; background-color: #5B2C6F !important;">
                         <i class="fa fa-minus" style="font-size: 1rem !important; color: #FFD700;"></i>
@@ -176,14 +174,12 @@ while ($row = $cart_result->fetch_assoc()) {
                         </select>
                     </div>
 
-                    <!-- Shipping Fee -->
                     <div class="mb-3">
                         <h6 class="fw-bold">🚚 Shipping Fee</h6>
                         <p class="text-muted mb-0">A standard shipping fee of <strong>₱50.00 per item</strong> will be applied.</p>
                         <p>📢 <span class="text-info">Shipping Fee Total:</span> ₱<span id="shipping-fee">0.00</span></p>
                     </div>
 
-                    <!-- Total Price -->
                     <div class="d-flex justify-content-between border-top pt-2">
                         <h5 class="fw-bold">💰 Grand Total</h5>
                         <h5 class="fw-bold">₱<span id="total-price">0.00</span></h5>
@@ -220,15 +216,12 @@ while ($row = $cart_result->fetch_assoc()) {
         let totalPrice = 0;
         let shippingFee = 0;
 
-        // Array to store selected product data
         let selectedProducts = [];
 
-        // Hide checkout button if cart is empty
         if (checkboxes.length === 0) {
             checkoutBtn.style.display = "none";
         }
 
-        // Update total price and selected product data when checkboxes are checked/unchecked
         checkboxes.forEach((checkbox) => {
             checkbox.addEventListener('change', () => {
                 updateSelectedProducts();
@@ -236,7 +229,6 @@ while ($row = $cart_result->fetch_assoc()) {
             });
         });
 
-        // "Check All" button functionality
         const checkAllBtn = document.getElementById('checkAllBtn');
         checkAllBtn.addEventListener('click', () => {
             checkboxes.forEach((checkbox) => {
@@ -270,7 +262,6 @@ while ($row = $cart_result->fetch_assoc()) {
             }
         });
 
-        // Function to update selected products
         function updateSelectedProducts() {
             selectedItemsList.innerHTML = '';
             hiddenInputsContainer.innerHTML = '';
@@ -288,8 +279,7 @@ while ($row = $cart_result->fetch_assoc()) {
 
         const itemTotal = itemPrice * itemQuantity;
 
-        // Apply shipping fee as ₱50 per product, not per quantity
-        const itemShippingFee = 50; // Fixed shipping fee per product
+        const itemShippingFee = 50; 
 
         totalPrice += itemTotal + itemShippingFee;
         shippingFee += itemShippingFee;

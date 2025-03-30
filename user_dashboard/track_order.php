@@ -43,32 +43,52 @@ while ($row = $result->fetch_assoc()) {
         margin-top: 0;
     }
 
-    .div3 {
-    grid-column: span 3;
-    grid-row-start: 5;
-    display: flex;
-    justify-content: space-around;
-    background-color:  #7D3C98 ; 
-    border: 3px solid #d4af37; 
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0px 4px 8px rgba(218, 165, 32, 0.5);
-    margin-bottom: 70px;
-}
+    .floating-icons {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        display: flex;
+        gap: 3rem;
+        width: 90%;
+        max-width: 600px;
+        justify-content: center;
+        z-index: 999;
+    }
 
+    .floating-icons div {
+        text-align: center;
+        flex: 1;
+    }
 
     .order-status-icon {
-        font-size: 36px;
-        transition: all 0.3s ease-in-out;
+        font-size: 1.8rem;
+        color: #7D3C98;
+        margin-bottom: 0.5rem;
+        transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
 
     .inactive-icon {
         opacity: 0.5;
     }
 
+    /* Glow effect for active icon */
     .active-icon {
-        color: #ffc107;
-        text-shadow: 0 0 15px #ffc107;
+        color: #F4D03F;
+        opacity: 1;
+        box-shadow: 0 0 15px #F4D03F, 0 0 30px #F4D03F;
+        border-radius: 50%;
+    }
+
+    .floating-icons div p {
+        font-size: 0.9rem;
+        margin: 0;
+        color: #333;
     }
 
     .nav-tabs .nav-link {
@@ -120,16 +140,7 @@ while ($row = $result->fetch_assoc()) {
         margin-bottom: 10px;
     }
 
-    .div3 div {
-        text-align: center;
-        padding: 10px;
-    }
-
-    .div3 p {
-        margin-top: 5px;
-        font-weight: bold;
-    }
-
+ 
     </style>
 </head>
 
@@ -137,65 +148,113 @@ while ($row = $result->fetch_assoc()) {
     <?php include 'navigation.php'; ?>
 
     <div class="container parent">
+<!-- Tabs Section -->
+<div class="div1">
+    <ul class="nav nav-tabs" id="orderStatusTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending">Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="received-tab" data-bs-toggle="tab" href="#received">To Receive</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="delivered-tab" data-bs-toggle="tab" href="#delivered">Delivered</a>
+        </li>
+    </ul>
 
-        <!-- Tabs Section -->
-        <div class="div1">
-            <ul class="nav nav-tabs" id="orderStatusTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending">Pending</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="received-tab" data-bs-toggle="tab" href="#received">To Receive</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="delivered-tab" data-bs-toggle="tab" href="#delivered">Delivered</a>
-                </li>
-            </ul>
-
-            <div class="tab-content">
-                <!-- Pending Orders -->
-                <div class="tab-pane fade show active" id="pending">
-                    <?php if (isset($orders['Pending'])): ?>
-                        <?php foreach ($orders['Pending'] as $order): ?>
-                            <div class="order-card">
-                                <strong>Order #<?php echo $order['order_id']; ?></strong>
-                                <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
+    <div class="tab-content mt-3">
+        <!-- Pending Orders -->
+        <div class="tab-pane fade show active" id="pending">
+            <?php if (isset($orders['Pending'])): ?>
+                <div class="accordion" id="pendingAccordion">
+                    <?php foreach ($orders['Pending'] as $order): ?>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPending<?php echo $order['order_id']; ?>">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#detailsPending<?php echo $order['order_id']; ?>" aria-expanded="false" aria-controls="detailsPending<?php echo $order['order_id']; ?>">
+                                    Tracking Code: <?php echo $order['tracking_code']; ?>
+                                </button>
+                            </h2>
+                            <div id="detailsPending<?php echo $order['order_id']; ?>" class="accordion-collapse collapse" aria-labelledby="headingPending<?php echo $order['order_id']; ?>" data-bs-parent="#pendingAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Order ID:</strong> <?php echo $order['order_id']; ?></p>
+                                    <p><strong>Username:</strong> <?php echo $order['username']; ?></p>
+                                    <p><strong>Product Names:</strong> <?php echo $order['product_names']; ?></p>
+                                    <p><strong>Quantities:</strong> <?php echo $order['quantities']; ?></p>
+                                    <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
+                                    <p><strong>Grand Total:</strong> ₱<?php echo $order['grand_total']; ?></p>
+                                    <p><strong>Status:</strong> <?php echo $order['order_status']; ?></p>
+                                    <p><strong>Order Date:</strong> <?php echo $order['order_date']; ?></p>
+                                </div>
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>No pending orders.</p>
-                    <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-
-                <!-- To Receive Orders -->
-                <div class="tab-pane fade" id="received">
-                    <?php if (isset($orders['To Receive'])): ?>
-                        <?php foreach ($orders['To Receive'] as $order): ?>
-                            <div class="order-card">
-                                <strong>Order #<?php echo $order['order_id']; ?></strong>
-                                <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>No orders to receive.</p>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Delivered Orders -->
-                <div class="tab-pane fade" id="delivered">
-                    <?php if (isset($orders['Delivered'])): ?>
-                        <?php foreach ($orders['Delivered'] as $order): ?>
-                            <div class="order-card">
-                                <strong>Order #<?php echo $order['order_id']; ?></strong>
-                                <p>Tracking Code: <?php echo $order['tracking_code']; ?></p>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>No delivered orders.</p>
-                    <?php endif; ?>
-                </div>
-            </div>
+            <?php else: ?>
+                <p>No pending orders.</p>
+            <?php endif; ?>
         </div>
+
+        <!-- To Receive Orders -->
+        <div class="tab-pane fade" id="received">
+            <?php if (isset($orders['To Receive'])): ?>
+                <div class="accordion" id="receivedAccordion">
+                    <?php foreach ($orders['To Receive'] as $order): ?>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingReceived<?php echo $order['order_id']; ?>">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#detailsReceived<?php echo $order['order_id']; ?>" aria-expanded="false" aria-controls="detailsReceived<?php echo $order['order_id']; ?>">
+                                    Tracking Code: <?php echo $order['tracking_code']; ?>
+                                </button>
+                            </h2>
+                            <div id="detailsReceived<?php echo $order['order_id']; ?>" class="accordion-collapse collapse" aria-labelledby="headingReceived<?php echo $order['order_id']; ?>" data-bs-parent="#receivedAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Order ID:</strong> <?php echo $order['order_id']; ?></p>
+                                    <p><strong>Username:</strong> <?php echo $order['username']; ?></p>
+                                    <p><strong>Product Names:</strong> <?php echo $order['product_names']; ?></p>
+                                    <p><strong>Quantities:</strong> <?php echo $order['quantities']; ?></p>
+                                    <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
+                                    <p><strong>Grand Total:</strong> ₱<?php echo $order['grand_total']; ?></p>
+                                    <p><strong>Status:</strong> <?php echo $order['order_status']; ?></p>
+                                    <p><strong>Order Date:</strong> <?php echo $order['order_date']; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>No orders to receive.</p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Delivered Orders -->
+        <div class="tab-pane fade" id="delivered">
+            <?php if (isset($orders['Delivered'])): ?>
+                <div class="accordion" id="deliveredAccordion">
+                    <?php foreach ($orders['Delivered'] as $order): ?>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDelivered<?php echo $order['order_id']; ?>">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#detailsDelivered<?php echo $order['order_id']; ?>" aria-expanded="false" aria-controls="detailsDelivered<?php echo $order['order_id']; ?>">
+                                    Tracking Code: <?php echo $order['tracking_code']; ?>
+                                </button>
+                            </h2>
+                            <div id="detailsDelivered<?php echo $order['order_id']; ?>" class="accordion-collapse collapse" aria-labelledby="headingDelivered<?php echo $order['order_id']; ?>" data-bs-parent="#deliveredAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Product Names:</strong> <?php echo $order['product_names']; ?></p>
+                                    <p><strong>Payment Method:</strong> <?php echo $order['payment_method']; ?></p>
+                                    <p><strong>Grand Total:</strong> ₱<?php echo $order['grand_total']; ?></p>
+                                    <p><strong>Status:</strong> <?php echo $order['order_status']; ?></p>
+                                    <p><strong>Order Date:</strong> <?php echo $order['order_date']; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>No delivered orders.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
 <!-- Cancelled Orders Section -->
 <div class="div2">
     <div class="cancelled-container">
@@ -214,23 +273,23 @@ while ($row = $result->fetch_assoc()) {
         <?php endif; ?>
     </div>
 </div>
+<!-- Status Icons Section -->
+<div class="div3 floating-icons">
+    <div>
+        <i class="fa-solid fa-clock order-status-icon inactive-icon" id="pending-icon"></i>
+        <p>Pending</p>
+    </div>
+    <div>
+        <i class="fa-solid fa-truck order-status-icon inactive-icon" id="received-icon"></i>
+        <p>To Receive</p>
+    </div>
+    <div>
+        <i class="fa-solid fa-box-open order-status-icon inactive-icon" id="delivered-icon"></i>
+        <p>Delivered</p>
+    </div>
+</div>
 
-
-        <!-- Status Icons Section -->
-        <div class="div3">
-            <div>
-                <i class="fa-solid fa-clock order-status-icon inactive-icon" id="pending-icon"></i>
-                <p>Pending</p>
-            </div>
-            <div>
-                <i class="fa-solid fa-truck order-status-icon inactive-icon" id="received-icon"></i>
-                <p>To Receive</p>
-            </div>
-            <div>
-                <i class="fa-solid fa-box-open order-status-icon inactive-icon" id="delivered-icon"></i>
-                <p>Delivered</p>
-            </div>
-        </div>
+       
     </div>
 
     <div class="footer">
@@ -269,6 +328,8 @@ while ($row = $result->fetch_assoc()) {
             });
         });
     });
+    document.getElementById('pending-icon').classList.add('active-icon');
+
 </script>
 
 
