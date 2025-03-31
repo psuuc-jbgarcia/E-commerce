@@ -108,14 +108,12 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
             <div class="container mt-4">
                 <h2 class="mb-4"><i class="fas fa-box me-2"></i> Manage Products</h2>
 
-                <!-- Button Group -->
                 <div class="btn-group-custom">
                     <button class="btn btn-primary btn-sm-custom" data-bs-toggle="modal" data-bs-target="#addProductModal">
                         <i class="fas fa-plus me-1"></i> Add Product
                     </button>
                 </div>
 
-                <!-- Product Table -->
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered" id="productTable" width="100%">
                         <thead>
@@ -165,7 +163,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
         </div>
     </div>
 
-    <!-- Add Product Modal -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form id="addProductForm" action="add_product.php" method="POST" enctype="multipart/form-data" class="modal-content">
@@ -175,7 +172,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <!-- Left Column -->
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Product Name</label>
@@ -190,7 +186,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
                                 <input type="number" step="0.01" name="price" id="price" class="form-control">
                             </div>
                         </div>
-                        <!-- Right Column -->
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="stock" class="form-label">Stock</label>
@@ -226,7 +221,6 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
         </div>
     </div>
     <!-- edit -->
-     <!-- Edit Product Modal -->
 <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <form id="editProductForm" action="update_product.php" method="POST" enctype="multipart/form-data" class="modal-content">
@@ -284,7 +278,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
         </form>
     </div>
 </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
@@ -298,45 +292,13 @@ $error = isset($_GET['error']) ? $_GET['error'] : '';
 
 $(document).ready(function () {
     $('#productTable').DataTable({
-        dom: '<"top"f>rt<"bottom"Bp><"clear">',
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                text: '<i class="fas fa-file-excel me-1"></i> Excel',
-                title: 'Product Report',
-                className: 'btn btn-success-custom'
-            },
-            {
-                extend: 'pdfHtml5',
-                text: '<i class="fas fa-file-pdf me-1"></i> PDF',
-                title: 'Product Report',
-                className: 'btn btn-danger-custom',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print me-1"></i> Print',
-                className: 'btn btn-info-custom',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            }
-        ],
+        dom: '<"top"f>rt<"bottom"p><"clear">',  
         responsive: true,
         autoWidth: false,
         pageLength: 10
     });
 
-    $('#category').on('change', function () {
-        if ($(this).val() === 'new') {
-            $('#new_category').show();
-        } else {
-            $('#new_category').hide();
-            $('#new_category_input').val(''); 
-        }
-    });
+
 //////////////////////////manage prod function
 //delete
     $(document).on('click', '.delete-btn', function (e) {
@@ -358,50 +320,60 @@ $(document).ready(function () {
         });
     });
 //add
-    $('#saveProduct').click(function () {
-        let isValid = true;
-        let errorMessage = "";
+$('#category').on('change', function () {
+    if ($(this).val() === 'new') {
+        $('#new_category').show();
+    } else {
+        $('#new_category').hide();
+        $('#new_category_input').val('');
+    }
+}); 
 
-        const name = $('#name').val().trim();
-        const description = $('#description').val().trim();
-        const price = $('#price').val().trim();
-        const stock = $('#stock').val().trim();
-        const category = $('#category').val();
-        const newCategory = $('#new_category_input').is(':visible') ? $('#new_category_input').val().trim() : '';
-        const productImage = $('#product_image').val().trim();
+$('#saveProduct').click(function () {
+    let isValid = true;
+    let errorMessage = "";
 
-        console.log("Name:", name);
-        console.log("Description:", description);
-        console.log("Price:", price);
-        console.log("Stock:", stock);
-        console.log("Category:", category);
-        console.log("New Category:", newCategory);
-        console.log("Product Image:", productImage);
+    const name = $('#name').val().trim();
+    const description = $('#description').val().trim();
+    const price = $('#price').val().trim();
+    const stock = $('#stock').val().trim();
+    const category = $('#category').val();
+    const newCategory = $('#new_category_input').is(':visible') ? $('#new_category_input').val().trim() : '';
+    const productImage = $('#product_image').val().trim();
 
-        if (name === '' || description === '' || price === '' || stock === '' || productImage === '') {
-            errorMessage = "Please fill in all required fields.";
-            isValid = false;
-        } 
-        else if (category === 'new' && newCategory === '') {
-            errorMessage = "Please enter a new category name.";
-            isValid = false;
-        } 
-        else if (category === '' || (category !== 'new' && $('#category option:selected').val() === '')) {
-            errorMessage = "Please select a valid category.";
-            isValid = false;
-        }
+    console.log("Name:", name);
+    console.log("Description:", description);
+    console.log("Price:", price);
+    console.log("Stock:", stock);
+    console.log("Category:", category);
+    console.log("New Category:", newCategory);
+    console.log("Product Image:", productImage);
 
-        if (!isValid) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: errorMessage
-            });
-        } else {
-            console.log("Form ready to submit!");
-            $('#addProductForm').submit();
-        }
-    });
+    if (name === '' || description === '' || price === '' || stock === '' || productImage === '') {
+        errorMessage = "Please fill in all required fields.";
+        isValid = false;
+    } 
+    else if (category === 'new' && newCategory === '') {
+        errorMessage = "Please enter a new category name.";
+        isValid = false;
+    } 
+    else if (category === '' || (category !== 'new' && $('#category option:selected').val() === '')) {
+        errorMessage = "Please select a valid category.";
+        isValid = false;
+    }
+
+    if (!isValid) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: errorMessage
+        });
+    } else {
+        console.log("Form ready to submit!");
+        $('#addProductForm').submit();
+    }
+});
+
 });
 // edit
 $(document).ready(function () {
@@ -419,12 +391,11 @@ $(document).ready(function () {
                 $('#edit_description').val(description);
                 $('#edit_price').val(price);
                 $('#edit_stock').val(stock);
-                $('#edit_category').val(category);  // This will update the category select input
+                $('#edit_category').val(category);  
 
-                // Check if the category is 'new' and display the new category input
                 if (category === 'new') {
                     $('#edit_new_category').show();
-                    $('#edit_new_category_input').val(''); // Clear the input for new category
+                    $('#edit_new_category_input').val(''); 
                 } else {
                     $('#edit_new_category').hide();
                 }
@@ -437,7 +408,7 @@ $(document).ready(function () {
                     $('#edit_new_category').show();
                 } else {
                     $('#edit_new_category').hide();
-                    $('#edit_new_category_input').val('');  // Reset new category if hidden
+                    $('#edit_new_category_input').val('');  
                 }
             });
         });

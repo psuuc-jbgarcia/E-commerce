@@ -4,6 +4,7 @@ if (!isset($_SESSION['admin_id'])) {
     header("Location: ../admin.php");
     exit();
 }
+require '../connection.php';
 ?>
 
 <!DOCTYPE html>
@@ -31,85 +32,56 @@ if (!isset($_SESSION['admin_id'])) {
         .card {
             border: none;
             border-radius: 12px;
-            background: linear-gradient(to right, #7D3C98, #9B59B6);
+            background: linear-gradient(135deg, #7D3C98, #5B2C6F);
             color: #fff;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .card h5 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .card h3 {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-        footer {
-            background-color: #f8f9fa;
-            padding: 10px 0;
-            font-size: 0.9rem;
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15);
         }
 
         .dashboard-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             color: #5B2C6F;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        .chart-container {
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+        .table-responsive {
             margin-top: 30px;
-            transition: transform 0.3s;
         }
 
-        .chart-container:hover {
-            transform: translateY(-5px);
-        }
-
-        canvas {
-            width: 100% !important;
-            height: 300px !important;
-        }
-
-        .secondary-nav {
-            background-color: #f8f9fa !important;
-            border-bottom: 1px solid #ddd;
-            padding: 10px 20px;
-            z-index: 1000;
-        }
-
-        .secondary-nav .btn-outline-secondary {
-            border-color: #7D3C98;
-            color: #7D3C98;
-        }
-
-        .secondary-nav .btn-outline-secondary:hover {
+        .table th {
             background-color: #7D3C98;
             color: #fff;
         }
 
-        .secondary-nav .navbar-text {
+        footer {
+            background-color: #f8f9fa;
+            padding: 12px 0;
+            font-size: 0.9rem;
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .navbar-text {
             font-size: 1rem;
-            color: #333;
+            color: #5B2C6F;
         }
 
         .btn-outline-secondary {
-            transition: background-color 0.3s, transform 0.2s;
+            border-color: #5B2C6F;
+            color: #5B2C6F;
         }
 
         .btn-outline-secondary:hover {
-            transform: scale(1.05);
+            background-color: #5B2C6F;
+            color: #fff;
         }
     </style>
 </head>
@@ -119,11 +91,10 @@ if (!isset($_SESSION['admin_id'])) {
         <?php include 'admin_nav.php'; ?>
 
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm secondary-nav">
+            <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
                 <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary">
                     <i class="fas fa-bars"></i>
                 </button>
-                      <h3>This page is static data only; For UI</h3>
 
                 <div class="ms-auto">
                     <span class="navbar-text me-3">
@@ -135,142 +106,100 @@ if (!isset($_SESSION['admin_id'])) {
             <div class="container-fluid mt-4">
                 <h2 class="dashboard-title"><i class="fas fa-home me-2"></i> Admin Dashboard</h2>
 
-                <div class="row g-3">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card text-center p-3">
+                <div class="row g-4">
+                    <!-- Total Users -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center p-4">
                             <div class="card-body">
-                                <h5><i class="fas fa-users text-white"></i> Total Users</h5>
-                                <h3>200</h3>
+                                <h5><i class="fas fa-users text-white me-1"></i> Total Users</h5>
+                                <?php
+                                $user_query = mysqli_query($conn, "SELECT COUNT(id) AS total_users FROM users");
+                                $user_count = mysqli_fetch_assoc($user_query);
+                                ?>
+                                <h3 class="mt-3"><?php echo $user_count['total_users']; ?></h3>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card text-center p-3">
+
+                    <!-- Total Products -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center p-4">
                             <div class="card-body">
-                                <h5><i class="fas fa-box text-white"></i> Total Products</h5>
-                                <h3>150</h3>
+                                <h5><i class="fas fa-box text-white me-1"></i> Total Products</h5>
+                                <?php
+                                $product_query = mysqli_query($conn, "SELECT COUNT(id) AS total_products FROM products");
+                                $product_count = mysqli_fetch_assoc($product_query);
+                                ?>
+                                <h3 class="mt-3"><?php echo $product_count['total_products']; ?></h3>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card text-center p-3">
+
+                    <!-- Total Sales -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center p-4">
                             <div class="card-body">
-                                <h5><i class="fas fa-chart-line text-white"></i> Total Sales</h5>
-                                <h3>₱50,000</h3>
+                                <h5><i class="fas fa-chart-line text-white me-1"></i> Total Sales</h5>
+                                <?php
+                                $sales_query = mysqli_query($conn, "SELECT SUM(grand_total) AS total_sales FROM orders");
+                                $sales_data = mysqli_fetch_assoc($sales_query);
+                                ?>
+                                <h3 class="mt-3">₱<?php echo number_format($sales_data['total_sales'], 2); ?></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Orders -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center p-4">
+                            <div class="card-body">
+                                <h5><i class="fas fa-shopping-cart text-white me-1"></i> Total Orders</h5>
+                                <?php
+                                $order_query = mysqli_query($conn, "SELECT COUNT(order_id) AS total_orders FROM orders");
+                                $order_count = mysqli_fetch_assoc($order_query);
+                                ?>
+                                <h3 class="mt-3"><?php echo $order_count['total_orders']; ?></h3>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Chart Section -->
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="chart-container">
-                            <h4 class="text-center"><i class="fas fa-chart-bar me-2"></i> Users Growth</h4>
-                            <canvas id="usersChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="chart-container">
-                            <h4 class="text-center"><i class="fas fa-chart-bar me-2"></i> Sales Performance</h4>
-                            <canvas id="salesChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="chart-container">
-                            <h4 class="text-center"><i class="fas fa-chart-bar me-2"></i> Orders Overview</h4>
-                            <canvas id="ordersChart"></canvas>
-                        </div>
-                    </div>
+                <!-- Sales Table -->
+                <div class="table-responsive mt-5">
+                    <h4 class="text-center mb-4"><i class="fas fa-receipt me-2"></i> Recent Sales</h4>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price (₱)</th>
+                                <th>Total (₱)</th>
+                                <th>Sale Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sales_data = mysqli_query($conn, "SELECT product_name, quantity, price, total, sale_date FROM sales ORDER BY sale_date DESC");
+                            while ($sale = mysqli_fetch_assoc($sales_data)) {
+                                echo "<tr>
+                                    <td>{$sale['product_name']}</td>
+                                    <td>{$sale['quantity']}</td>
+                                    <td>₱" . number_format($sale['price'], 2) . "</td>
+                                    <td>₱" . number_format($sale['total'], 2) . "</td>
+                                    <td>{$sale['sale_date']}</td>
+                                </tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <footer class="text-center mt-4">
-                <p>&copy; 2025 Simple Shop Inventory. All Rights Reserved.</p>
-            </footer>
+            <
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("sidebarCollapse").addEventListener("click", function () {
-                document.getElementById("sidebar").classList.toggle("active");
-                document.getElementById("content").classList.toggle("active");
-            });
-
-            // Users Chart
-            var ctxUsers = document.getElementById('usersChart').getContext('2d');
-            var usersChart = new Chart(ctxUsers, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Total Users',
-                        data: [120, 150, 180, 250, 300, 350],
-                        backgroundColor: 'rgba(125, 60, 152, 0.2)',
-                        borderColor: '#7D3C98',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Sales Chart
-            var ctxSales = document.getElementById('salesChart').getContext('2d');
-            var salesChart = new Chart(ctxSales, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Total Sales (₱)',
-                        data: [10000, 15000, 20000, 25000, 30000, 40000],
-                        backgroundColor: '#F4D03F',
-                        borderColor: '#F39C12',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Orders Chart
-            var ctxOrders = document.getElementById('ordersChart').getContext('2d');
-            var ordersChart = new Chart(ctxOrders, {
-                type: 'pie',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Total Orders',
-                        data: [50, 60, 90, 120, 150, 180],
-                        backgroundColor: ['#7D3C98', '#F4D03F', '#5DADE2', '#E74C3C', '#28B463', '#F39C12']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

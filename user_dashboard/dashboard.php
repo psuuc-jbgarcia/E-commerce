@@ -182,25 +182,20 @@ if (!empty($params)) {
 
                                         <div class="d-grid gap-2 mt-3">
     <button type="submit" class="btn w-100" 
-        style="background-color: #7D3C98 !important; color: #FFFFFF !important; border: 2px solid #5B2C6F !important; border-radius: 8px !important; padding: 10px 0 !important; transition: background-color 0.3s ease-in-out !important;"
+        style="background-color: #7D3C98; color: #FFFFFF; border: 2px solid #7D3C98; border-radius: 8px; padding: 10px 0; transition: background-color 0.3s ease-in-out;"
         onmouseover="this.style.backgroundColor='#5B2C6F';" 
         onmouseout="this.style.backgroundColor='#7D3C98';">
         <i class="fas fa-cart-plus me-1"></i> Add to Cart
     </button>
-
-    <!-- Buy Now Button -->
-<button type="button" class="btn w-100" 
-    style="background-color: #FFD700 !important; color: #333333 !important; border: 2px solid #FFC107 !important; border-radius: 8px !important; padding: 10px 0 !important; transition: background-color 0.3s ease-in-out !important;"
-    data-bs-toggle="modal" data-bs-target="#buyNowModal"
+    <button type="button" class="btn w-100" 
+    style="background-color: #FFD700; color: #333333; border: 2px solid #FFD700; border-radius: 8px; padding: 10px 0; transition: background-color 0.3s ease-in-out;"
+    onclick="showAlert()"
     onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#000000';" 
     onmouseout="this.style.backgroundColor='#FFD700'; this.style.color='#333333';">
     <i class="fas fa-bolt me-1"></i> Buy Now
 </button>
-
-
-
-
 </div>
+
 
                                     </form>
                                 <?php } else { ?>
@@ -217,29 +212,12 @@ if (!empty($params)) {
             ?>
         </div>
     </div>
-<!-- Buy Now Modal -->
-<div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 15px !important;">
-            <div class="modal-header" style="background-color: #7D3C98 !important; color: #FFFFFF !important; border-top-left-radius: 15px !important; border-top-right-radius: 15px !important;">
-                <h5 class="modal-title" id="buyNowModalLabel"><i class="fas fa-tools me-2"></i> Feature Under Development</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center" style="font-size: 1.1rem !important; color: #333333 !important;">
-                🚧 This feature is currently under development. Please check back later!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 8px !important;">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+
     <div class="footer">
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
 
     <script>
-        // Apply search and filter dynamically
         function applyFilters() {
             const searchQuery = document.getElementById('searchInput').value;
             const selectedCategory = document.getElementById('categoryFilter').value;
@@ -247,8 +225,10 @@ if (!empty($params)) {
             window.location.href = url;
         }
 
-        // Auto-filter on category change
         document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+    function showAlert() {
+        alert(" This feature is currently under development. Please check back later!");
+    }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

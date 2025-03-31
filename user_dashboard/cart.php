@@ -87,36 +87,38 @@ while ($row = $cart_result->fetch_assoc()) {
     <div class="row g-4">
         <?php foreach ($cart_items as $item) { ?>
             <div class="col-md-4 mb-4">
-    <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; border: 2px solid #FFD700 !important; border-radius: 15px !important; background-color: #7D3C98 !important;">
+    <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important; border: 2px solidrgb(255, 255, 255) !important; border-radius: 15px !important; background-color:white #7D3C98 !important;">
         <div class="card-body d-flex flex-column">
-            <h5 class="card-title text-center" style="font-size: 1.25rem !important; font-weight: bold !important; color: #FFD700 !important;"><?php echo htmlspecialchars($item['product_name']); ?></h5>
+            <h5 class="card-title text-center" style="font-size: 1.25rem !important; font-weight: bold !important; color: #333333 !important;"><?php echo htmlspecialchars($item['product_name']); ?></h5>
             <input type="hidden" class="product-id" value="<?php echo htmlspecialchars($item['product_id']); ?>">
 
-            <img src="../uploads/<?= $item['image_name'] ?>" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important; border: 2px solid #FFD700 !important;">
+            <img src="../uploads/<?= $item['image_name'] ?>" class="card-img-top" alt="<?php echo htmlspecialchars($item['image_name']); ?>" style="max-height: 200px !important; object-fit: cover !important; border-radius: 10px !important; border: 2px solidrgb(26, 24, 15) !important;">
             
-            <p class="card-text mt-3" style="font-size: 1rem !important; color: #F7DC6F !important;">
-                <strong style="color: #FFD700;">Quantity:</strong> <?php echo $item['quantity']; ?><br>
-                <strong style="color: #FFD700;">Price:</strong> ₱<?php echo number_format($item['price'], 2); ?><br>
-                <strong style="color: #FFD700;">Total:</strong> ₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
+            <p class="card-text mt-3" style="font-size: 1rem !important; color: #7D3C98 !important;">
+                <strong style="color:#333333;">Quantity:</strong> <?php echo $item['quantity']; ?><br>
+                <strong style="color:#333333;">Price:</strong> ₱<?php echo number_format($item['price'], 2); ?><br>
+                <strong style="color: #333333;">Total:</strong> ₱<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
             </p>
 
             <div class="d-flex justify-content-between align-items-center mt-3">
-                <div class="form-check" style="position: relative;">
-                    <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>" class="form-check-input" style="position: absolute; opacity: 0 !important; z-index: 1 !important;">
-                    <label for="item-<?php echo $item['id']; ?>" class="custom-checkbox-label" style="display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid #FFD700; background-color: #7D3C98; position: relative; cursor: pointer; transition: background-color 0.3s ease-in-out !important; z-index: 0 !important;">
-                        <i class="fa fa-check" style="position: absolute; top: 3px; left: 3px; font-size: 16px; color: #FFD700; opacity: 0; transition: opacity 0.3s ease-in-out !important;"></i>
-                    </label>
-                </div>
+            <div class="form-check">
+    <input type="checkbox" name="selected_items[]" value="<?php echo $item['id']; ?>" id="item-<?php echo $item['id']; ?>" class="form-check-input" style="border: 2px solid black;">
+    <label for="item-<?php echo $item['id']; ?>" class="form-check-label">
+        Select Item
+    </label>
+</div>
 
-                <div class="d-flex align-items-center border rounded p-2" style="border: 1px solid #FFD700 !important; background-color: #5B2C6F !important;">
-                    <button type="button" class="btn btn-sm btn-outline-secondary quantity-decrease" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important; border-color: #FFD700 !important; background-color: #5B2C6F !important;">
-                        <i class="fa fa-minus" style="font-size: 1rem !important; color: #FFD700;"></i>
-                    </button>
-                    <span class="mx-3 fw-bold quantity-display" style="font-size: 1.1rem !important; color: #FFD700;"><?php echo $item['quantity']; ?></span>
-                    <button type="button" class="btn btn-sm btn-outline-secondary quantity-increase" data-item-id="<?php echo $item['id']; ?>" style="border-radius: 50% !important; padding: 5px 10px !important; border-color: #FFD700 !important; background-color: #5B2C6F !important;">
-                        <i class="fa fa-plus" style="font-size: 1rem !important; color: #FFD700;"></i>
-                    </button>
-                </div>
+
+                <div class="d-flex align-items-center border rounded p-2" style="border: 1px solid black;">
+    <button type="button" class="btn btn-sm quantity-decrease" data-item-id="<?php echo $item['id']; ?>">
+        <i class="fa fa-minus" style="font-size: 1rem;"></i>
+    </button>
+    <span class="mx-3 fw-bold quantity-display" style="font-size: 1.1rem;"><?php echo $item['quantity']; ?></span>
+    <button type="button" class="btn btn-sm quantity-increase" data-item-id="<?php echo $item['id']; ?>">
+        <i class="fa fa-plus" style="font-size: 1rem;"></i>
+    </button>
+</div>
+
             </div>
         </div>
     </div>
@@ -143,56 +145,57 @@ while ($row = $cart_result->fetch_assoc()) {
     </div>
 
     <!-- Checkout Modal -->
-    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #F4D03F; color: #333333;">
-                    <h5 class="modal-title" id="checkoutModalLabel">🧾 Checkout Receipt</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #F4D03F; color: #333333;">
+                <h5 class="modal-title" id="checkoutModalLabel">Checkout Receipt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <h5 class="text-center mb-4">Thank You for Shopping!</h5>
+
+                <h6 class="fw-bold">Your Selected Items</h6>
+                <ul id="selected-items-list" class="list-group mb-3"></ul>
+
+                <div class="mb-3">
+                    <h6 class="fw-bold">Shipping Address</h6>
+                    <input type="text" class="form-control" name="address" placeholder="Enter your address" value="<?php echo htmlspecialchars($user_address); ?>" required>
                 </div>
 
-                <div class="modal-body">
-                    <h5 class="text-center mb-4">Thank You for Shopping!</h5>
-
-                    <h6 class="fw-bold">📦 Your Selected Items</h6>
-                    <ul id="selected-items-list" class="list-group mb-3"></ul>
-
-                    <div class="mb-3">
-                        <h6 class="fw-bold">📍 Shipping Address</h6>
-                        <input type="text" class="form-control" name="address" placeholder="Enter your address" value="<?php echo htmlspecialchars($user_address); ?>" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <h6 class="fw-bold">💳 Payment Method</h6>
-                        <select class="form-select" name="payment_method" required>
-                            <option value="cash_on_delivery">Cash on Delivery</option>
-                            <option value="credit_card">Credit Card</option>
-                            <option value="gcash">GCash</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <h6 class="fw-bold">🚚 Shipping Fee</h6>
-                        <p class="text-muted mb-0">A standard shipping fee of <strong>₱50.00 per item</strong> will be applied.</p>
-                        <p>📢 <span class="text-info">Shipping Fee Total:</span> ₱<span id="shipping-fee">0.00</span></p>
-                    </div>
-
-                    <div class="d-flex justify-content-between border-top pt-2">
-                        <h5 class="fw-bold">💰 Grand Total</h5>
-                        <h5 class="fw-bold">₱<span id="total-price">0.00</span></h5>
-                    </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold">Payment Method</h6>
+                    <select class="form-select" name="payment_method" required>
+                        <option value="cash_on_delivery">Cash on Delivery</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="gcash">GCash</option>
+                    </select>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <form action="process_checkout.php" method="POST" id="checkoutForm">
-                        <div id="hidden-inputs-container"></div>
-                        <button type="submit" class="btn btn-success placeorder">Confirm Order</button>
-                    </form>
+                <div class="mb-3">
+                    <h6 class="fw-bold">Shipping Fee</h6>
+                    <p class="text-muted mb-0">A standard shipping fee of <strong>₱50.00 per item</strong> will be applied.</p>
+                    <p>Shipping Fee Total: ₱<span id="shipping-fee">0.00</span></p>
                 </div>
+
+                <div class="d-flex justify-content-between border-top pt-2">
+                    <h5 class="fw-bold">Grand Total</h5>
+                    <h5 class="fw-bold">₱<span id="total-price">0.00</span></h5>
+                </div>
+            </div>
+
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form action="process_checkout.php" method="POST" id="checkoutForm">
+                    <div id="hidden-inputs-container"></div>
+                    <button type="submit" class="btn btn-success placeorder">Confirm Order</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 
     <div class="footer">
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.

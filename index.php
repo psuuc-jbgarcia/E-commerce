@@ -27,30 +27,19 @@
 
         .navbar {
             background-color: var(--primary-color) !important;
-            padding: 1.2rem 0;
+            padding: 0.8rem 0;
             animation: fadeInDown 1.2s ease-in-out;
-        }
-
-        @keyframes fadeInDown {
-            0% {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
 
         .navbar-brand {
             color: #fff !important;
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
 
         .navbar-nav .nav-link {
             color: #fff !important;
-            font-size: 1.1rem;
-            margin-right: 1.2rem;
+            font-size: 1rem;
+            margin-right: 1rem;
             transition: color 0.3s ease-in-out;
         }
 
@@ -62,6 +51,7 @@
             background-color: var(--accent-color) !important;
             border-color: var(--accent-color) !important;
             transition: background-color 0.3s ease-in-out, transform 0.2s;
+            font-size: 0.9rem;
         }
 
         .btn-primary:hover {
@@ -72,33 +62,12 @@
         .hero {
             background: linear-gradient(to right, #7D3C98, #F4D03F);
             color: #fff;
-            padding: 8rem 0;
+            padding: 5rem 0;
             animation: fadeIn 1.5s ease-in-out;
         }
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
         .hero h1 {
-            font-size: 4rem;
-            animation: slideInDown 1s ease-in-out;
-        }
-
-        @keyframes slideInDown {
-            0% {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            font-size: 2.5rem;
         }
 
         .card {
@@ -114,37 +83,30 @@
 
         .card-title {
             color: var(--primary-color);
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         #products, #inventory, #faq, #about, #contact {
             background-color: #fff;
-            padding: 5rem 0;
+            padding: 3rem 0;
             animation: fadeInUp 1.2s ease-in-out;
         }
 
-        @keyframes fadeInUp {
-            0% {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .footer {
+            background-color: #7D3C98;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 30px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            left: 0;
         }
 
-        .footer {
-    background-color: #7D3C98;
-    color: #FFFFFF;
-    text-align: center;
-    padding: 10px 0;
-    margin-top: 30px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-}
+        .card-body {
+            padding: 1.2rem;
+        }
     </style>
 </head>
 
@@ -167,8 +129,7 @@
                     <li class="nav-item"><a class="nav-link" href="#faq"><i class="fas fa-question-circle me-1"></i> FAQ</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i> Contact</a></li>
                 </ul>
-                <a href="./authentication/login.php" class="btn btn-primary ms-3"><i class="fas fa-sign-in-alt me-1"></i> Get
-                    Started</a>
+                <a href="./authentication/login.php" class="btn btn-primary ms-3"><i class="fas fa-sign-in-alt me-1"></i> Get Started</a>
             </div>
         </div>
     </nav>
@@ -214,37 +175,6 @@
         </div>
     </section>
 
-    <section id="inventory" class="py-5 text-center">
-        <div class="container">
-            <h2 class="fw-bold mb-4"><i class="fas fa-boxes me-2"></i> Inventory Management</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-chart-bar me-1 text-primary"></i> Track Stock Levels</h5>
-                            <p class="card-text">Keep track of stock levels and avoid overstocking or running out.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-truck-loading me-1 text-success"></i> Receive New Shipments</h5>
-                            <p class="card-text">Log incoming shipments and keep your inventory updated.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-cogs me-1 text-warning"></i> Automate Restocking</h5>
-                            <p class="card-text">Set automatic reorder levels to ensure constant supply.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <section id="faq" class="py-5 text-center">
         <div class="container">

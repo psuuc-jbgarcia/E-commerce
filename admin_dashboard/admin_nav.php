@@ -43,7 +43,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <nav id="sidebar" class="bg-purple">
     <div class="sidebar-header text-center">
         <img src="../static/images/admin_logo.png" alt="Logo" class="logo">
-        <h4 class="text-white">Golden Mart</h4>
+        <h4 class="text-white">Simple Shop</h4>
     </div>
     <ul class="list-unstyled components">
         <li><a href="admin_dashboard.php" class="<?= $current_page == 'admin_dashboard.php' ? 'active' : '' ?>"><i class="fas fa-home me-2"></i> Home</a></li>

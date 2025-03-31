@@ -121,7 +121,7 @@
     <img src="../static/images/logo.png" alt="Shop Logo" class="logo">
     <div class="system-title">Small shop</div>
 
-    <h3 class="fw-bold" style="color: #7D3C98;"><i class="fas fa-user-plus me-1"></i> Register</h3>
+    <h3 class="fw-bold" style="color: #7D3C98;"> Register</h3>
 </div>
 
             <form id="registerForm" action="register_user.php" method="POST" onsubmit="return validateForm()">

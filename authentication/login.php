@@ -116,7 +116,7 @@
             <div class="text-center">
             <img src="" alt="Shop Logo" class="logo">
             <p class="shop-title">Small Shop</p>
-                <h3 class="fw-bold mb-4" style="color: #7D3C98;"><i class="fas fa-sign-in-alt me-1"></i> Login</h3>
+                <h3 class="fw-bold mb-4" style="color: #7D3C98;"> Login</h3>
             </div>
             <form id="loginForm" action="logingin.php" method="POST" onsubmit="return validateForm(event)">
                 <div class="mb-3 text-start">

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Product</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
 <?php
 session_start();
@@ -23,12 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stock = $_POST['stock'];
     $category = $_POST['category'];
     $new_category = isset($_POST['new_category']) ? $_POST['new_category'] : '';
+    $created_at = date('Y-m-d H:i:s'); // Automatically set current timestamp
 
+    // Check if "Add New Category" is selected
     if ($category === 'new' && !empty($new_category)) {
-        $category = $new_category;
-        $category_insert = $conn->prepare("INSERT INTO categories (name) VALUES (?)");
-        $category_insert->bind_param("s", $category);
-        $category_insert->execute();
+        $category = $new_category; // Use new category
     }
 
     if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === 0) {
@@ -37,19 +38,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $image_size = $_FILES['product_image']['size'];
         $image_extension = pathinfo($image_name, PATHINFO_EXTENSION);
 
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (!in_array(strtolower($image_extension), $allowed_extensions)) {
+            echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Only JPG, JPEG, PNG, and GIF files are allowed.',
+                        confirmButtonText: 'OK'
+                    });
+                  </script>";
+            exit();
+        }
+
         $image_new_name = uniqid('', true) . '.' . $image_extension;
         $upload_dir = '../uploads/';
         $image_path = $upload_dir . $image_new_name;
 
         if (move_uploaded_file($image_tmp_name, $image_path)) {
-            $stmt = $conn->prepare("INSERT INTO products (name, description, price, image_name, stock, category) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO products (name, description, price, image_name, stock, category, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
             if (!$stmt) {
                 die("Error preparing statement: " . $conn->error);
             }
 
-            $stmt->bind_param("ssdssi", $name, $description, $price, $image_new_name, $stock, $category);
+            $stmt->bind_param("ssdssss", $name, $description, $price, $image_new_name, $stock, $category, $created_at);
 
             if ($stmt->execute()) {
+
                 echo "<script>
                         Swal.fire({
                             icon: 'success',
@@ -67,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Failed to add product.',
+                            text: 'Failed to add product. Please try again.',
                             confirmButtonText: 'OK'
                         });
                       </script>";
@@ -96,4 +112,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 </body>
+
 </html>

@@ -1,107 +1,77 @@
 body {
-    background: linear-gradient(to bottom right, #4B0082, #8E44AD, #F4D03F);
+    background-color: #7D3C98;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    font-family: Arial, sans-serif;
+    margin: 0;
 }
 
 .container-wrapper {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 450px;
+    max-width: 400px;
     padding: 40px;
     position: relative;
-    overflow: hidden;
-    animation: fadeIn 1s ease-in-out;
-}
-
-.floating-bubble {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background: rgba(125, 60, 152, 0.15);
-    border-radius: 50%;
-    animation: float 10s infinite ease-in-out alternate;
-    z-index: -1;
-}
-
-.bubble-1 {
-    top: -50px;
-    left: -50px;
-}
-
-.bubble-2 {
-    bottom: -60px;
-    right: -60px;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-30px);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
 }
 
 .logo {
-    width: 120px;
+    width: 100px;
     display: block;
     margin: 0 auto 20px;
 }
 
 .title {
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #7D3C98;
     margin-bottom: 20px;
-    letter-spacing: 1.2px;
 }
 
-.btn-primary {
-    background: linear-gradient(to right, #7D3C98, #F4D03F);
-    border: none;
-    transition: all 0.3s;
-}
-
-.btn-primary:hover {
-    background: #F4D03F;
-    color: #4B0082;
+.form-control {
+    border-radius: 8px;
+    padding: 10px;
 }
 
 .form-control:focus {
     border-color: #7D3C98;
-    box-shadow: 0 0 12px rgba(125, 60, 152, 0.5);
+    box-shadow: 0 0 8px rgba(125, 60, 152, 0.2);
 }
 
 .input-group-text {
     cursor: pointer;
     background-color: #7D3C98;
     color: #FFFFFF;
-    transition: all 0.3s;
+    border-radius: 0 8px 8px 0;
+    padding: 10px;
 }
 
 .input-group-text:hover {
     background-color: #F4D03F;
     color: #4B0082;
+}
+
+button.btn {
+    background-color: #7D3C98;
+    color: #FFFFFF;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+button.btn:hover {
+    background-color: #F4D03F;
+}
+
+small.text-danger {
+    font-size: 0.875rem;
+    color: #D9534F;
 }
 
 a {
@@ -110,8 +80,4 @@ a {
 
 a:hover {
     color: #F4D03F;
-}
-
-.text-danger {
-    font-size: 0.875rem;
 }
