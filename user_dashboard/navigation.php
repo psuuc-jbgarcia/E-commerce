@@ -44,14 +44,12 @@ $notif_count_query->close();
         </div>
 
         <div class="d-flex align-items-center">
-            <!-- Notification Button -->
             <button class="btn btn-outline-light position-relative me-3" style="border-color: #F4D03F; color: #F4D03F;" id="notifBtn">
     <i class="fas fa-bell"></i>
     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;"></span>
 </button>
 
 
-            <!-- Profile Dropdown -->
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle" style="border-color: #F4D03F; color: #F4D03F;" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     Profile
@@ -72,7 +70,6 @@ $notif_count_query->close();
 </nav>
 <div style="margin-top: 80px;"></div>
 
-<!-- Notification Modal -->
 <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
