@@ -13,7 +13,8 @@
 <body style="background-color:#7D3C98; font-family: Arial, sans-serif; margin: 0; height: 100vh;">
     <div class="container d-flex justify-content-center align-items-center" style="height: 100%;">
         <div class="card p-4" style="max-width: 400px; width: 100%; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-            <img src="../static/images/admin_logo.png" alt="Admin Logo" class="logo mx-auto d-block" style="width: 100px; height: auto;">
+        <img src="./static/images/logo.png" alt="Admin Logo" class="logo mx-auto d-block" 
+     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
             <div class="text-center mb-3">
                 <h4><i class="fas fa-user-shield me-1"></i> Admin Portal</h4>
             </div>

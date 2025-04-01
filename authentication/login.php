@@ -114,8 +114,9 @@
         <!-- Right Side - Login Form -->
         <div class="right-side col-md-6">
             <div class="text-center">
-            <img src="" alt="Shop Logo" class="logo">
-            <p class="shop-title">Small Shop</p>
+            <img src="../static/images/logo.png" alt="Admin Logo" class="logo mx-auto d-block" 
+     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+            <!-- <p class="shop-title">Small Shop</p> -->
                 <h3 class="fw-bold mb-4" style="color: #7D3C98;"> Login</h3>
             </div>
             <form id="loginForm" action="logingin.php" method="POST" onsubmit="return validateForm(event)">

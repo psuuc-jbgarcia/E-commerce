@@ -42,7 +42,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <nav id="sidebar" class="bg-purple">
     <div class="sidebar-header text-center">
-        <img src="../static/images/admin_logo.png" alt="Logo" class="logo">
+    <img src="../static/images/logo.png" alt="Admin Logo" class="logo mx-auto d-block" 
+     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
         <h4 class="text-white">Simple Shop</h4>
     </div>
     <ul class="list-unstyled components">

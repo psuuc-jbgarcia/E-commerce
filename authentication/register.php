@@ -118,8 +118,9 @@
         <div class="right-side col-md-6">
         <div class="text-center mb-3">
             
-    <img src="../static/images/logo.png" alt="Shop Logo" class="logo">
-    <div class="system-title">Small shop</div>
+        <img src="../static/images/logo.png" alt="Admin Logo" class="logo mx-auto d-block" 
+     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+    <!-- <div class="system-title">Small shop</div> -->
 
     <h3 class="fw-bold" style="color: #7D3C98;"> Register</h3>
 </div>

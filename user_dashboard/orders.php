@@ -93,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,125 +101,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     <title>Orders - Small Shop Inventory</title>
     <link rel="stylesheet" href="../static/css/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <style>
+        th {
+            background-color: #7D3C98 !important;
+            color: #ffffff !important;
+            text-align: center;
+        }
 
+        tbody tr:hover {
+            background-color: #f4f4f4 !important;
+        }
 
- 
-    th {
-        background-color: #7D3C98 !important;
-        color: #ffffff !important;
-        text-align: center;
-    }
+        table {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    tbody tr:hover {
-        background-color: #f4f4f4 !important;
-    }
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
 
-    table.dataTable thead th {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
+        .badge {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
 
-    table.dataTable {
-        background-color: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        .badge-warning {
+            background-color: #F4D03F;
+            color: #333333;
+        }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        padding: 5px 12px;
-        background-color: #7D3C98;
-        color: #fff !important;
-        border-radius: 5px;
-        margin: 0 2px;
-    }
+        .badge-success {
+            background-color: #28a745;
+            color: #fff;
+        }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #F4D03F !important;
-        color: #333333 !important;
-        border-color: #F4D03F !important;
-    }
+        .badge-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
 
-    .dataTables_wrapper .dataTables_filter input {
-        border-radius: 5px;
-        padding: 8px;
-        border: 1px solid #ddd;
-    }
+        .badge-danger {
+            background-color: #E74C3C;
+            color: #fff;
+        }
 
-    .dataTables_wrapper .dataTables_length select {
-        border-radius: 5px;
-        padding: 5px;
-        border: 1px solid #ddd;
-    }
+        .btn-cancel {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
 
-    .badge {
-        font-size: 0.9rem;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
+.btn-cancel:hover {
+    background-color: #c0392b; 
+}
 
-    .badge-warning {
-        background-color: #F4D03F;
-        color: #333333;
-    }
+.btn-cancel1 {
+    background-color: #e74c3c !important;
+    border: none !important;
+    padding: 5px 15px !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    transition: background-color 0.3s ease !important;
+}
 
-    .badge-success {
-        background-color: #28a745;
-        color: #fff;
-    }
+.btn-cancel1:hover {
+    background-color: #c0392b !important;
+}
 
-    .badge-secondary {
-        background-color: #6c757d;
-        color: #fff;
-    }
-
-    .badge-danger {
-        background-color: #E74C3C;
-        color: #fff;
-    }
-
-    /* Style for modal details */
-    .modal-header {
-        background-color: #F4D03F;
-        color: #333333;
-    }
-
-    .modal-body p {
-        font-size: 1rem;
-        margin-bottom: 10px;
-    }
-
-    /* Styling for order buttons */
-    .btn-view {
-        background-color: #7D3C98;
-        color: #ffffff;
-    }
-
-    .btn-view:hover {
-        background-color: #5D2D82;
-    }
-
-    .btn-cancel {
-        background-color: #E74C3C;
-        color: #ffffff;
-    }
-
-    .btn-cancel:hover {
-        background-color: #C0392B;
-    }
-
-    /* Container outside the table for extra info */
-    .extra-info {
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-    }
+        .extra-info {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
 
     </style>
 </head>
@@ -229,11 +196,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
 
     <div class="container mt-5">
         <?php if ($result->num_rows > 0): ?>
-            <table id="ordersTable" class="display">
+            <table>
                 <thead>
                     <tr>
-                    <th style="display: none;">Order ID</th>
-
+                        <th style="display: none;">Order ID</th>
                         <th>Tracking No</th>
                         <th>Items</th>
                         <th>Total</th>
@@ -244,8 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                        <td style="display: none;"><?php echo $row['order_id']; ?></td>
-
+                            <td style="display: none;"><?php echo $row['order_id']; ?></td>
                             <td><?php echo $row['tracking_code']; ?></td>
                             <td><?php echo $row['product_names']; ?></td>
                             <td>₱<?php echo number_format($row['grand_total'], 2); ?></td>
@@ -262,62 +227,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
                                 <span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
                             </td>
                             <td>
-    <form method="POST" class="d-inline">
-        <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
-        <button class="btn btn-view btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#orderModal<?php echo $row['order_id']; ?>" onclick="showModal(event)">
-            <i class="fas fa-eye me-1"></i> View Details
-        </button>
-    </form>
+                                <form method="POST" class="d-inline">
+                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                    <button class="btn btn-view btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#orderModal<?php echo $row['order_id']; ?>" onclick="showModal(event)">
+                                        <i class="fas fa-eye me-1"></i> View Details
+                                    </button>
+                                </form>
 
-    <?php if ($status === 'Pending'): ?>
-    <form method="POST" class="d-inline">
-        <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
-        <button type="submit" name="cancel_order" class="btn btn-danger btn-sm" style="background-color: #E74C3C; color: white; border-color: #E74C3C;">
-            <i class="fas fa-times-circle me-1"></i> Cancel Order
-        </button>
-    </form>
-    <?php endif; ?>
-</td>
+                                <?php if ($status === 'Pending'): ?>
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                        <button type="submit" name="cancel_order" class="btn btn-cancel1 btn-sm">
+    <i class="fas fa-times-circle me-1"></i> Cancel Order
+</button>
+
+                                    </form>
+                                <?php endif; ?>
+                            </td>
                         </tr>
 
-<!-- Modal for order details -->
-<div class="modal fade" id="orderModal<?php echo $row['order_id']; ?>" tabindex="-1" aria-labelledby="orderModalLabel<?php echo $row['order_id']; ?>" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <h5 class="modal-title" id="orderModalLabel<?php echo $row['order_id']; ?>"><i class="fas fa-box"></i> Order Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Tracking Number:</strong> <?php echo $row['tracking_code']; ?></p>
-                <p><strong>Items:</strong> 
-                    <?php
-                    // Exploding the product names and quantities
-                    $product_names = explode(',', $row['product_names']);
-                    $quantities = explode(',', $row['quantities']);
-                    
-                    // Loop through and display each item with its quantity
-                    for ($i = 0; $i < count($product_names); $i++) {
-                        echo $product_names[$i] . ' - Quantity: ' . $quantities[$i] . '<br>';
-                    }
-                    ?>
-                </p>
-                <p><strong>Total:</strong> ₱<?php echo number_format($row['grand_total'], 2); ?></p>
-                <p><strong>Order Date:</strong> <?php echo date('F j, Y', strtotime($row['order_date'])); ?></p>
-                <p><strong>Shipping Address:</strong> <?php echo $row['shipping_address']; ?></p>
-                <p><strong>Payment Method:</strong> <?php echo $row['payment_method']; ?></p>
-                <p><strong>Status:</strong> 
-                    <span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+                        <!-- Modal for order details -->
+                        <div class="modal fade" id="orderModal<?php echo $row['order_id']; ?>" tabindex="-1" aria-labelledby="orderModalLabel<?php echo $row['order_id']; ?>" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-warning">
+                                        <h5 class="modal-title" id="orderModalLabel<?php echo $row['order_id']; ?>"><i class="fas fa-box"></i> Order Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Tracking Number:</strong> <?php echo $row['tracking_code']; ?></p>
+                                        <p><strong>Items:</strong> 
+                                            <?php
+                                            $product_names = explode(',', $row['product_names']);
+                                            $quantities = explode(',', $row['quantities']);
+                                            
+                                            for ($i = 0; $i < count($product_names); $i++) {
+                                                echo $product_names[$i] . ' - Quantity: ' . $quantities[$i] . '<br>';
+                                            }
+                                            ?>
+                                        </p>
+                                        <p><strong>Total:</strong> ₱<?php echo number_format($row['grand_total'], 2); ?></p>
+                                        <p><strong>Order Date:</strong> <?php echo date('F j, Y', strtotime($row['order_date'])); ?></p>
+                                        <p><strong>Shipping Address:</strong> <?php echo $row['shipping_address']; ?></p>
+                                        <p><strong>Payment Method:</strong> <?php echo $row['payment_method']; ?></p>
+                                        <p><strong>Status:</strong> 
+                                            <span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <?php endwhile; ?>
                 </tbody>
             </table>
@@ -329,27 +291,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
     <div class="footer">
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-
-
-        $(document).ready(function() {
-            $('#ordersTable').DataTable({
-                "paging": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "responsive": true,
-                "order": [[0, "desc"]]
-            });
-        });
-    </script>
-    <script>
-    function showModal(event) {
-        event.preventDefault(); 
-    }
-</script>
 
 </body>
 </html>

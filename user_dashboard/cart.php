@@ -168,8 +168,8 @@ while ($row = $cart_result->fetch_assoc()) {
                     <h6 class="fw-bold">Payment Method</h6>
                     <select class="form-select" name="payment_method" required>
                         <option value="cash_on_delivery">Cash on Delivery</option>
-                        <option value="credit_card">Credit Card</option>
-                        <option value="gcash">GCash</option>
+                        <!-- <option value="credit_card">Credit Card</option>
+                        <option value="gcash">GCash</option> -->
                     </select>
                 </div>
 
@@ -201,7 +201,6 @@ while ($row = $cart_result->fetch_assoc()) {
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
     document.addEventListener("DOMContentLoaded", () => {

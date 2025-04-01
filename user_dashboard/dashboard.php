@@ -46,7 +46,8 @@ if (!empty($params)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - Browse Products</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    <link rel="stylesheet" href="../static/css/global.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/global.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -106,9 +107,6 @@ if (!empty($params)) {
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
         }
-
-     
-     
     </style>
 </head>
 
@@ -116,7 +114,6 @@ if (!empty($params)) {
     <?php include 'navigation.php'; ?>
 
     <div class="container content">
-        <!-- Search and Filter Section -->
         <div class="filter-section">
             <div class="row g-3">
                 <div class="col-md-6">
@@ -141,7 +138,6 @@ if (!empty($params)) {
             </div>
         </div>
 
-        <!-- Products Display -->
         <div class="row">
             <?php
             if ($result->num_rows > 0) {
@@ -169,35 +165,33 @@ if (!empty($params)) {
 
                                 <?php if ($row['stock'] > 0) { ?>
                                     <form action="add_to_cart.php" method="POST">
-                                        <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
-                                        <input type="hidden" name="price" value="<?php echo $row['price']; ?>">
-                                        <input type="hidden" name="image_name" value="<?php echo $row['image_name']; ?>">
+    <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+    <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+    <input type="hidden" name="price" value="<?php echo $row['price']; ?>">
+    <input type="hidden" name="image_name" value="<?php echo $row['image_name']; ?>">
 
-                                        <div class="input-group mb-3">
-                                            <input type="number" name="quantity" class="form-control" min="1" max="<?php echo $row['stock']; ?>" value="1" required>
-                                            <span class="input-group-text">x</span>
-                                            <span class="input-group-text">₱<?php echo number_format($row['price'], 2); ?></span>
-                                        </div>
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" name="quantity" class="form-control" id="quantity" value="1" min="1" required>
+    </div>
 
-                                        <div class="d-grid gap-2 mt-3">
-    <button type="submit" class="btn w-100" 
-        style="background-color: #7D3C98; color: #FFFFFF; border: 2px solid #7D3C98; border-radius: 8px; padding: 10px 0; transition: background-color 0.3s ease-in-out;"
-        onmouseover="this.style.backgroundColor='#5B2C6F';" 
-        onmouseout="this.style.backgroundColor='#7D3C98';">
-        <i class="fas fa-cart-plus me-1"></i> Add to Cart
-    </button>
-    <button type="button" class="btn w-100" 
-    style="background-color: #FFD700; color: #333333; border: 2px solid #FFD700; border-radius: 8px; padding: 10px 0; transition: background-color 0.3s ease-in-out;"
-    onclick="showAlert()"
-    onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#000000';" 
-    onmouseout="this.style.backgroundColor='#FFD700'; this.style.color='#333333';">
-    <i class="fas fa-bolt me-1"></i> Buy Now
-</button>
-</div>
+    <div class="d-grid gap-2 mt-3">
+        <button type="submit" class="btn w-100" 
+                style="background-color: #7D3C98; color: #FFFFFF; border: 2px solid #7D3C98; border-radius: 8px; padding: 10px 0; transition: background-color 0.3s ease-in-out;"
+                onmouseover="this.style.backgroundColor='#5B2C6F';" 
+                onmouseout="this.style.backgroundColor='#7D3C98';">
+            <i class="fas fa-cart-plus me-1"></i> Add to Cart
+        </button>
+        <button type="button" class="btn w-100"
+                style="background-color: #FFD700; color: #333333; border: 2px solid #FFD700; border-radius: 8px; padding: 10px 0; transition: background-color 0.3s ease-in-out;"
+                onmouseover="this.style.backgroundColor='#F4D03F'; this.style.color='#000000';" 
+                onmouseout="this.style.backgroundColor='#FFD700'; this.style.color='#333333';"
+                onclick="openCheckoutModal('<?php echo $row['id']; ?>', '<?php echo $row['name']; ?>', '<?php echo $row['price']; ?>', 1, <?php echo $row['stock']; ?>)">
+            <i class="fas fa-bolt me-1"></i> Buy Now
+        </button>
+    </div>
+</form>
 
-
-                                    </form>
                                 <?php } else { ?>
                                     <button class="btn btn-secondary w-100" disabled><i class="fas fa-ban me-1"></i> Out of Stock</button>
                                 <?php } ?>
@@ -217,6 +211,69 @@ if (!empty($params)) {
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
 
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #F4D03F; color: #333333;">
+                    <h5 class="modal-title" id="checkoutModalLabel">Checkout Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h5 class="text-center mb-4">Thank You for Shopping!</h5>
+
+                    <h6 class="fw-bold">Your Selected Item</h6>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span id="selected-product-name"></span>
+                            <span>₱<span id="selected-product-price"></span></span>
+                        </li>
+                    </ul>
+
+                    <div class="mb-3">
+                        <h6 class="fw-bold">Shipping Address</h6>
+                        <input type="text" class="form-control" id="shipping-address" name="address" value="<?php echo htmlspecialchars($_SESSION['address'] ?? ''); ?>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="fw-bold">Payment Method</h6>
+                        <select class="form-select" name="payment_method" id="payment-method" required>
+                            <option value="cash_on_delivery">Cash on Delivery</option>
+                            <!-- <option value="credit_card">Credit Card</option>
+                            <option value="gcash">GCash</option> -->
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <h6 class="fw-bold">Shipping Fee</h6>
+                        <p class="text-muted mb-0">A standard shipping fee of <strong>₱50.00</strong> applies.</p>
+                        <p>Shipping Fee Total: ₱<span id="shipping-fee">50.00</span></p>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-top pt-2">
+                        <h5 class="fw-bold">Grand Total</h5>
+                        <h5 class="fw-bold">₱<span id="total-price">0.00</span></h5>
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="buy_now.php" method="POST" id="checkoutForm">
+    <input type="hidden" name="product_id" id="hidden-product-id">
+    <input type="hidden" name="product_name" id="hidden-product-name">
+    <input type="hidden" name="price" id="hidden-product-price">
+    <input type="hidden" name="total_price" id="hidden-total-price">
+    <input type="hidden" name="shipping_address" id="hidden-shipping-address">
+    <input type="hidden" name="payment_method" id="hidden-payment-method">
+    <button type="submit" class="btn btn-success placeorder">Confirm Order</button>
+</form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function applyFilters() {
             const searchQuery = document.getElementById('searchInput').value;
@@ -224,13 +281,38 @@ if (!empty($params)) {
             const url = 'dashboard.php?search=' + encodeURIComponent(searchQuery) + '&category=' + encodeURIComponent(selectedCategory);
             window.location.href = url;
         }
+        document.getElementById('payment-method').addEventListener('change', function () {
+    const paymentMethod = this.value;
+    console.log('Selected payment method:', paymentMethod);
 
-        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-    function showAlert() {
-        alert(" This feature is currently under development. Please check back later!");
-    }
+    document.getElementById('hidden-payment-method').value = paymentMethod;
+});
+
+
+
+function openCheckoutModal(productId, productName, productPrice, quantity, stock) {
+    document.getElementById('selected-product-name').innerText = productName;
+    document.getElementById('selected-product-price').innerText = productPrice;
+    document.getElementById('shipping-fee').innerText = '50.00'; // fixed shipping fee
+    document.getElementById('total-price').innerText = (parseFloat(productPrice) + 50).toFixed(2);
+
+    document.getElementById('hidden-product-id').value = productId;
+    document.getElementById('hidden-product-name').value = productName;
+    document.getElementById('hidden-product-price').value = productPrice;
+    document.getElementById('hidden-total-price').value = (parseFloat(productPrice) + 50).toFixed(2);
+
+    const paymentMethod = document.getElementById('payment-method').value;
+    console.log('Payment method to be set in hidden input:', paymentMethod); 
+    document.getElementById('hidden-payment-method').value = paymentMethod;
+
+    console.log('Hidden payment method value:', document.getElementById('hidden-payment-method').value);
+
+    var checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+    checkoutModal.show();
+}
+
+
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
 
+</body>
 </html>
