@@ -54,9 +54,8 @@ $user = $result->fetch_assoc();
             justify-content: center;
             margin: 0 auto 20px;
         }
-        body{
+        body {
             background-color: #5d346b !important;
-
         }
     </style>
 </head>
@@ -77,6 +76,7 @@ $user = $result->fetch_assoc();
             <div class="alert alert-danger"><?php echo $error_msg; ?></div>
         <?php endif; ?>
 
+        <!-- Profile Form -->
         <form action="update_profile.php" method="POST">
             <div class="row g-3">
                 <div class="col-md-6">
@@ -100,12 +100,30 @@ $user = $result->fetch_assoc();
             <div class="d-grid gap-2 mt-4">
                 <button type="submit" class="btn btn-primary">Update Profile</button>
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-        Change Password
-    </button>
+                    Change Password
+                </button>
             </div>
         </form>
-    </div>
+
+   <!-- Secure PIN Button -->
+<div class="col-md-6 mt-4 mx-auto">
+    <label class="form-label">Secure Checkout PIN</label>
+    <?php if (is_null($user['secure_checkout_pin'])): ?>
+        <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#setPinModal">
+            Set Up Secure PIN
+        </button>
+    <?php else: ?>
+        <input type="text" class="form-control text-center fw-bold" 
+            value="<?php echo substr($user['secure_checkout_pin'], 0, 1) . '***'; ?>" 
+            disabled>
+        <button class="btn btn-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#setPinModal">
+            Update Secure PIN
+        </button>
+    <?php endif; ?>
 </div>
+
+
+<!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -149,21 +167,46 @@ $user = $result->fetch_assoc();
     </div>
 </div>
 
-<script>document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function () {
-            let input = this.parentElement.querySelector('input'); // Get the input field
-            let icon = this.querySelector('i'); // Get the icon
+<div class="modal fade" id="setPinModal" tabindex="-1" aria-labelledby="setPinModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="setPinModalLabel">Set Secure Checkout PIN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="set_secure_pin.php" method="post">
+                    <div class="mb-3">
+                        <label for="new_pin" class="form-label">Enter 4-Digit PIN</label>
+                        <input type="password" class="form-control text-center" id="new_pin" name="new_pin" maxlength="4" pattern="\d{4}" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Save PIN</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
-            } else {
-                input.type = "password";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-            }
-        });
-    });</script>
+
+<script>
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function () {
+        let input = this.parentElement.querySelector('input'); // Get the input field
+        let icon = this.querySelector('i'); // Get the icon
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    });
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
