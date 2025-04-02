@@ -12,14 +12,14 @@
 session_start();
 require '../connection.php';
 
+
 if (!isset($_SESSION['user_id'])) {
     die("Unauthorized access.");
 }
 
 $user_id = $_SESSION['user_id'];
 $new_pin = $_POST['new_pin'] ?? '';
-
-// Validate PIN
+$_SESSION['pin'] =$new_pin;
 if (!preg_match("/^\d{4}$/", $new_pin)) {
     echo "<script>
         Swal.fire({
@@ -34,14 +34,12 @@ if (!preg_match("/^\d{4}$/", $new_pin)) {
     exit;
 }
 
-// Update PIN in the database
 $stmt = $conn->prepare("UPDATE users SET secure_checkout_pin = ? WHERE id = ?");
 $stmt->bind_param("si", $new_pin, $user_id);
 $stmt->execute();
 $stmt->close();
 $conn->close();
 
-// Success Alert with Redirect
 echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <script>
     Swal.fire({

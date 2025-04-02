@@ -317,12 +317,18 @@ if (!empty($params)) {
 </div>
 
     <script>
-        function applyFilters() {
-            const searchQuery = document.getElementById('searchInput').value;
-            const selectedCategory = document.getElementById('categoryFilter').value;
-            const url = 'dashboard.php?search=' + encodeURIComponent(searchQuery) + '&category=' + encodeURIComponent(selectedCategory);
-            window.location.href = url;
-        }
+ function applyFilters() {
+    const searchQuery = document.getElementById('searchInput').value;
+    const selectedCategory = document.getElementById('categoryFilter').value;
+    const url = 'dashboard.php?search=' + encodeURIComponent(searchQuery) + '&category=' + encodeURIComponent(selectedCategory);
+    
+    // Log the URL to check if it's correct
+    console.log('Redirecting to:', url);
+
+    // Redirect to the new URL with filters applied
+    window.location.href = url;
+}
+
         document.getElementById('payment-method').addEventListener('change', function () {
     const paymentMethod = this.value;
     console.log('Selected payment method:', paymentMethod);

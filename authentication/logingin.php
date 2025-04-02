@@ -20,6 +20,8 @@ if ($result_check->num_rows > 0) {
         $_SESSION['email'] = $user['email'];
         $_SESSION['number'] = $user['phone'];
         $_SESSION['address'] = $user['address'];
+        $_SESSION['pin'] = $user['secure_checkout_pin'];
+
 
         echo "
         <html>

@@ -168,8 +168,6 @@ while ($row = $cart_result->fetch_assoc()) {
                     <h6 class="fw-bold">Payment Method</h6>
                     <select class="form-select" name="payment_method" required>
                         <option value="cash_on_delivery">Cash on Delivery</option>
-                        <!-- <option value="credit_card">Credit Card</option>
-                        <option value="gcash">GCash</option> -->
                     </select>
                 </div>
 
@@ -183,13 +181,22 @@ while ($row = $cart_result->fetch_assoc()) {
                     <h5 class="fw-bold">Grand Total</h5>
                     <h5 class="fw-bold">₱<span id="total-price">0.00</span></h5>
                 </div>
+
+<div id="pin-input-section" class="mb-3">
+    <h6 class="fw-bold">Enter Secure CheckOut PIN</h6>
+    <input type="password" id="user-pin" class="form-control" placeholder="Enter your PIN" required maxlength="4">
+    <div id="pin-error-message" class="text-danger mt-2" style="display:none;">Incorrect PIN. Please try again.</div>
+</div>
+
+
             </div>
 
             <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <form action="process_checkout.php" method="POST" id="checkoutForm">
                     <div id="hidden-inputs-container"></div>
-                    <button type="submit" class="btn btn-success placeorder">Confirm Order</button>
+                    <!-- Hidden checkout button initially -->
+                    <button type="submit" class="btn btn-success placeorder" id="checkout-btn" style="display: none;">Confirm Order</button>
                 </form>
             </div>
         </div>
@@ -201,6 +208,32 @@ while ($row = $cart_result->fetch_assoc()) {
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
 
+    <script>
+    // Make sure this script is placed after the modal HTML code
+    document.addEventListener('DOMContentLoaded', function() {
+        const userPin = "<?php echo $_SESSION['pin']; ?>"; // Retrieve the PIN from the session
+        const pinInput = document.getElementById('user-pin');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const pinInputSection = document.getElementById('pin-input-section');
+        const pinErrorMessage = document.getElementById('pin-error-message');
+
+        pinInput.addEventListener('input', function() {
+            const enteredPin = pinInput.value;
+
+            // Check if the entered PIN matches the user's PIN stored in the session
+            if (enteredPin === userPin) {
+                // Show the checkout button and hide the PIN input section
+                checkoutBtn.style.display = 'block';
+                pinInputSection.style.display = 'none';
+                pinErrorMessage.style.display = 'none';
+            } else {
+                // Show error message if PIN is incorrect
+                pinErrorMessage.style.display = 'block';
+                checkoutBtn.style.display = 'none'; // Keep the checkout button hidden
+            }
+        });
+    });
+</script>
 
     <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -393,6 +426,8 @@ while ($row = $cart_result->fetch_assoc()) {
         });
     });
 </script>
+
+
 </body>
 
 </html>

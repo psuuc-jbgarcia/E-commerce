@@ -184,3 +184,29 @@ $(document).ready(function () {
 });
 
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userPin = "<?php echo $_SESSION['pin']; ?>"; 
+    const notificationContainer = document.createElement('div');
+    
+    if (!userPin) {
+        notificationContainer.style.position = 'fixed';
+        notificationContainer.style.top = '50%';
+        notificationContainer.style.left = '50%';
+        notificationContainer.style.transform = 'translate(-50%, -50%)';
+        notificationContainer.style.backgroundColor = '#f8d7da';
+        notificationContainer.style.color = '#721c24';
+        notificationContainer.style.padding = '10px 20px';
+        notificationContainer.style.border = '1px solid #f5c6cb';
+        notificationContainer.style.borderRadius = '5px';
+        notificationContainer.style.zIndex = '9999';
+        notificationContainer.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1)';
+        notificationContainer.style.fontSize = '16px';
+        notificationContainer.innerHTML = 'Please set up your Secure Checkout PIN in the Profile page to be able to order.';
+        
+        document.body.appendChild(notificationContainer);
+
+        
+    }
+});
+</script>
