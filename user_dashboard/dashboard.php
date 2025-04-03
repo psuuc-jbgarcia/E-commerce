@@ -7,23 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 
 require '../connection.php';
 
-// Check if the user has set their PIN
-$user_id = $_SESSION['user_id'];
-$query = "SELECT secure_checkout_pin FROM users WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$stmt->bind_result($pin);
-$stmt->fetch();
-$stmt->close();
-
-if (!$pin) {
-    // If PIN is not set, redirect to profile or show a message
-    $pin_required = true;
-} else {
-    $pin_required = false;
-}
-
 $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
@@ -229,7 +212,6 @@ if (!empty($params)) {
         &copy; <?php echo date('Y'); ?> Small Shop Inventory. All Rights Reserved.
     </div>
 
- <!-- Modal content (updated) -->
 <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -267,12 +249,11 @@ if (!empty($params)) {
                     <p>Shipping Fee Total: ₱<span id="shipping-fee">50.00</span></p>
                 </div>
 
-                <!-- Display note if PIN is required -->
-                <?php if ($pin_required): ?>
-                    <div class="alert alert-warning mt-3">
-                        <strong>Notice:</strong> You need to set up your PIN in your <a href="profile.php">profile page</a> before proceeding with the checkout.
-                    </div>
-                <?php endif; ?>
+                <div id="pin-input-section" class="mb-3">
+                    <h6 class="fw-bold">Enter Secure CheckOut PIN</h6>
+                    <input type="password" id="user-pin" class="form-control" placeholder="Enter your PIN" required maxlength="4">
+                    <div id="pin-error-message" class="text-danger mt-2" style="display:none;">Incorrect PIN. Please try again.</div>
+                </div>
 
                 <div class="d-flex justify-content-between border-top pt-2">
                     <h5 class="fw-bold">Grand Total</h5>
@@ -282,39 +263,24 @@ if (!empty($params)) {
 
             <div class="modal-footer d-flex justify-content-between">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <form action="buy_now.php" method="POST" id="checkoutForm">
+                
+                <button type="button" class="btn btn-success" id="checkout-btn" style="display:none;" onclick="confirmOrder()">Confirm Order</button>
+
+                <form action="buy_now.php" method="POST" id="checkoutForm" style="display:none;">
                     <input type="hidden" name="product_id" id="hidden-product-id">
                     <input type="hidden" name="product_name" id="hidden-product-name">
                     <input type="hidden" name="price" id="hidden-product-price">
                     <input type="hidden" name="total_price" id="hidden-total-price">
                     <input type="hidden" name="shipping_address" id="hidden-shipping-address">
-                    <input type="hidden" name="payment_method" id="hidden-payment-method">
-                    <button type="submit" class="btn btn-success placeorder" <?php echo $pin_required ? 'disabled' : ''; ?>>Confirm Order</button>
+                    <input type="text" name="payment_method" id="hidden-payment-method">
+                    <button type="submit" class="btn btn-success placeorder">Confirm Order</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Modal for PIN input -->
-<div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="pinModalLabel">Enter PIN to Confirm Order</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <label for="pinInput" class="form-label">Enter your PIN:</label>
-                <input type="password" class="form-control" id="pinInput" placeholder="Enter PIN" required>
-                <div id="pinError" class="text-danger mt-2" style="display:none;">Incorrect PIN. Please try again.</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="verifyPin()">Confirm Order</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 
     <script>
  function applyFilters() {
@@ -322,12 +288,42 @@ if (!empty($params)) {
     const selectedCategory = document.getElementById('categoryFilter').value;
     const url = 'dashboard.php?search=' + encodeURIComponent(searchQuery) + '&category=' + encodeURIComponent(selectedCategory);
     
-    // Log the URL to check if it's correct
+    
     console.log('Redirecting to:', url);
 
-    // Redirect to the new URL with filters applied
     window.location.href = url;
 }
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('checkoutModal');
+    const userPin = "<?php echo $_SESSION['pin']; ?>";
+    const pinInput = document.getElementById('user-pin');
+    const pinErrorMessage = document.getElementById('pin-error-message');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const checkoutForm = document.getElementById('checkoutForm');
+    const pinInputSection = document.getElementById('pin-input-section');
+
+    pinInput.addEventListener('input', function () {
+        const enteredPin = pinInput.value;
+
+       
+        if (enteredPin === userPin) {
+            checkoutBtn.style.display = 'block';
+            pinInputSection.style.display = 'none';
+            pinErrorMessage.style.display = 'none';
+        } else {
+            pinErrorMessage.style.display = 'block';
+            checkoutBtn.style.display = 'none'; 
+        }
+    });
+
+   
+    checkoutBtn.addEventListener('click', function () {
+        checkoutForm.style.display = 'block';
+        checkoutBtn.style.display = 'none'; 
+
+        checkoutForm.submit(); 
+    });
+});
 
         document.getElementById('payment-method').addEventListener('change', function () {
     const paymentMethod = this.value;
@@ -341,7 +337,7 @@ if (!empty($params)) {
 function openCheckoutModal(productId, productName, productPrice, quantity, stock) {
     document.getElementById('selected-product-name').innerText = productName;
     document.getElementById('selected-product-price').innerText = productPrice;
-    document.getElementById('shipping-fee').innerText = '50.00'; // fixed shipping fee
+    document.getElementById('shipping-fee').innerText = '50.00'; 
     document.getElementById('total-price').innerText = (parseFloat(productPrice) + 50).toFixed(2);
 
     document.getElementById('hidden-product-id').value = productId;
@@ -349,42 +345,21 @@ function openCheckoutModal(productId, productName, productPrice, quantity, stock
     document.getElementById('hidden-product-price').value = productPrice;
     document.getElementById('hidden-total-price').value = (parseFloat(productPrice) + 50).toFixed(2);
 
-    const paymentMethod = document.getElementById('payment-method').value;
-    console.log('Payment method to be set in hidden input:', paymentMethod); 
-    document.getElementById('hidden-payment-method').value = paymentMethod;
+    const paymentMethod = document.getElementById('payment-method').value; 
+    document.getElementById('hidden-payment-method').value = paymentMethod; 
 
-    console.log('Hidden payment method value:', document.getElementById('hidden-payment-method').value);
-
-    // Show the PIN modal
-    var pinModal = new bootstrap.Modal(document.getElementById('pinModal'));
-    pinModal.show();
+    var checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+    checkoutModal.show();
 }
-function verifyPin() {
-    const enteredPin = document.getElementById('pinInput').value;
-    const userId = <?php echo $_SESSION['user_id']; ?>; // Get the user ID from session
 
-    // Send an AJAX request to validate the PIN
-    fetch('verify_pin.php', {
-        method: 'POST',
-        body: JSON.stringify({ user_id: userId, pin: enteredPin }),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.valid) {
-            // If PIN is correct, submit the checkout form
-            document.getElementById('checkoutForm').submit();
-        } else {
-            // If PIN is incorrect, show error message
-            document.getElementById('pinError').style.display = 'block';
-        }
-    })
-    .catch(error => {
-        console.error('Error verifying PIN:', error);
-    });
-}
+
+document.getElementById('checkoutForm').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    console.log('Form is being submitted...'); 
+
+    this.submit(); 
+});
+
 
     </script>
 

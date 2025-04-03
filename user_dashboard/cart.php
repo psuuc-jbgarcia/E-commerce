@@ -195,7 +195,6 @@ while ($row = $cart_result->fetch_assoc()) {
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <form action="process_checkout.php" method="POST" id="checkoutForm">
                     <div id="hidden-inputs-container"></div>
-                    <!-- Hidden checkout button initially -->
                     <button type="submit" class="btn btn-success placeorder" id="checkout-btn" style="display: none;">Confirm Order</button>
                 </form>
             </div>
@@ -209,9 +208,8 @@ while ($row = $cart_result->fetch_assoc()) {
     </div>
 
     <script>
-    // Make sure this script is placed after the modal HTML code
     document.addEventListener('DOMContentLoaded', function() {
-        const userPin = "<?php echo $_SESSION['pin']; ?>"; // Retrieve the PIN from the session
+        const userPin = "<?php echo $_SESSION['pin']; ?>"; 
         const pinInput = document.getElementById('user-pin');
         const checkoutBtn = document.getElementById('checkout-btn');
         const pinInputSection = document.getElementById('pin-input-section');
@@ -220,16 +218,13 @@ while ($row = $cart_result->fetch_assoc()) {
         pinInput.addEventListener('input', function() {
             const enteredPin = pinInput.value;
 
-            // Check if the entered PIN matches the user's PIN stored in the session
             if (enteredPin === userPin) {
-                // Show the checkout button and hide the PIN input section
                 checkoutBtn.style.display = 'block';
                 pinInputSection.style.display = 'none';
                 pinErrorMessage.style.display = 'none';
             } else {
-                // Show error message if PIN is incorrect
                 pinErrorMessage.style.display = 'block';
-                checkoutBtn.style.display = 'none'; // Keep the checkout button hidden
+                checkoutBtn.style.display = 'none'; 
             }
         });
     });
