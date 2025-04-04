@@ -1,6 +1,10 @@
 <?php 
 session_start();
 require '../connection.php';
+if (!isset($_SESSION['email'])) {
+    header("Location: ../authentication/login.php");
+    exit();
+}
 
 $username = $_SESSION['email'];
 
