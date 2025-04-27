@@ -121,7 +121,12 @@ $user = $result->fetch_assoc();
         </button>
     <?php endif; ?>
 </div>
-
+<!-- Notification below Profile Card -->
+<?php if (is_null($user['secure_checkout_pin'])): ?>
+    <div class="alert alert-warning mt-4">
+        ⚠️ Please set up your Secure Checkout PIN in the Profile page to be able to order.
+    </div>
+<?php endif; ?>
 
 <!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
@@ -193,6 +198,24 @@ document.querySelectorAll('.toggle-password').forEach(button => {
     button.addEventListener('click', function () {
         let input = this.parentElement.querySelector('input'); // Get the input field
         let icon = this.querySelector('i'); // Get the icon
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    });
+});
+</script>
+<script>
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function () {
+        let input = this.parentElement.querySelector('input'); 
+        let icon = this.querySelector('i'); 
 
         if (input.type === "password") {
             input.type = "text";

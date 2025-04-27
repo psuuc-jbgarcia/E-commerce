@@ -107,7 +107,7 @@ $notif_count_query->close();
     async function fetchNotificationCount() {
     try {
         const response = await fetch("fetch_notifications_count.php");
-        const count = await response.text(); // Assuming it returns just the count as a number
+        const count = await response.text(); 
         console.log(count);
         if (count > 0) {
             $("#notifBtn .badge").text(count).show();
@@ -120,23 +120,20 @@ $notif_count_query->close();
 }
 
 $(document).ready(function () {
-    // Initial fetch of notification count
     fetchNotificationCount();
 
-    // Fetch notification count every 10 seconds (10000 ms)
     setInterval(fetchNotificationCount, 5000);
 });
 
 
-    // Open the modal and load notifications when the bell icon is clicked
     $("#notifBtn").click(function () {
         var myModal = new bootstrap.Modal(document.getElementById('notificationModal'), {
             keyboard: false
         });
-        myModal.show(); // Show the modal
+        myModal.show(); 
 
         $.ajax({
-            url: "fetch_notifications.php", // Path to the PHP file for fetching the actual notifications
+            url: "fetch_notifications.php", 
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -163,7 +160,6 @@ $(document).ready(function () {
         });
     });
 
-    // Function to format the time ago text
     function timeAgo(date) {
         const now = new Date();
         const seconds = Math.floor((now - new Date(date)) / 1000);
@@ -184,29 +180,5 @@ $(document).ready(function () {
 });
 
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const userPin = "<?php echo $_SESSION['pin']; ?>"; 
-    const notificationContainer = document.createElement('div');
-    
-    if (!userPin) {
-        notificationContainer.style.position = 'fixed';
-        notificationContainer.style.top = '50%';
-        notificationContainer.style.left = '50%';
-        notificationContainer.style.transform = 'translate(-50%, -50%)';
-        notificationContainer.style.backgroundColor = '#f8d7da';
-        notificationContainer.style.color = '#721c24';
-        notificationContainer.style.padding = '10px 20px';
-        notificationContainer.style.border = '1px solid #f5c6cb';
-        notificationContainer.style.borderRadius = '5px';
-        notificationContainer.style.zIndex = '9999';
-        notificationContainer.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1)';
-        notificationContainer.style.fontSize = '16px';
-        notificationContainer.innerHTML = 'Please set up your Secure Checkout PIN in the Profile page to be able to order.';
-        
-        document.body.appendChild(notificationContainer);
 
-        
-    }
-});
-</script>
+
